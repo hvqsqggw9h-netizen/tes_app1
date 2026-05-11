@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TES 科目1 過去問アプリ</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --primary-soft: #dbeafe;
+      --correct: #16a34a;
+      --wrong: #dc2626;
+      --border: #e5e7eb;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif;
+      background: linear-gradient(135deg, #eef2ff, #f8fafc 48%, #ecfeff);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 40px);
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(229,231,235,0.9);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .mode, .year-btn, .choice, .main-btn, .ghost-btn {
+      border: 1px solid var(--border);
+      background: var(--card);
+      border-radius: 18px;
+      padding: 16px;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+
+    .mode:hover, .year-btn:hover, .choice:hover, .ghost-btn:hover {
+      transform: translateY(-2px);
+      border-color: #93c5fd;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, .1);
+    }
+
+    .mode strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .mode span, .year-btn span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .year-list {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .year-btn {
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .hidden { display: none !important; }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .progress-wrap {
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width .25s ease;
+    }
+
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 10px;
+    }
+
+    .question {
+      font-size: clamp(20px, 3vw, 28px);
+      line-height: 1.55;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0 0 20px;
+    }
+
+    .choices {
+      display: grid;
+      gap: 12px;
+    }
+
+    .choice {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
+    .choice-mark {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 13px;
+    }
+
+    .choice.correct {
+      border-color: #86efac;
+      background: #f0fdf4;
+      color: #14532d;
+    }
+
+    .choice.wrong {
+      border-color: #fecaca;
+      background: #fef2f2;
+      color: #7f1d1d;
+    }
+
+    .feedback {
+      margin-top: 18px;
+      border-radius: 20px;
+      padding: 18px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+    }
+
+    .feedback h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .feedback p {
+      margin: 0;
+      line-height: 1.8;
+      color: #374151;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .main-btn {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .ghost-btn {
+      font-weight: 800;
+      text-align: center;
+      background: white;
+    }
+
+    .result-score {
+      font-size: clamp(42px, 8vw, 72px);
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      margin: 8px 0 4px;
+    }
+
+    .result-note {
+      color: var(--muted);
+      line-height: 1.8;
+      margin: 0 0 18px;
+    }
+
+    .summary-box {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .summary-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .summary-item strong {
+      display: block;
+      font-size: 24px;
+    }
+
+    .summary-item span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 760px) {
+      .app { padding: 16px; }
+      header { align-items: flex-start; flex-direction: column; }
+      .grid, .summary-box { grid-template-columns: 1fr; }
+      .year-list { grid-template-columns: repeat(3, 1fr); }
+      .card { padding: 18px; border-radius: 22px; }
+      .topline { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <span class="badge">TES Learning App</span>
+        <h1>科目1 繊維に関する一般知識</h1>
+        <p class="subtitle">2020〜2025年対応予定。年度別・分野別・ランダム学習に展開できるUIです。</p>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="card">
+        <span class="badge">STEP 1</span>
+        <h2>学習モードを選択</h2>
+        <p class="subtitle">まずは「年度別」を完成させ、その後に分野別・ランダム・苦手復習へ広げます。</p>
+        <div class="grid">
+          <button class="mode" onclick="showYearSelect()">
+            <strong>年度別に解く</strong>
+            <span>2020〜2025年の過去問を年度ごとに学習</span>
+          </button>
+          <button class="mode" onclick="startQuiz('ランダム10問')">
+            <strong>ランダム10問</strong>
+            <span>短時間で反復。スマホ学習向け</span>
+          </button>
+          <button class="mode" onclick="startQuiz('苦手復習')">
+            <strong>苦手復習</strong>
+            <span>間違えた問題を重点的に復習</span>
+          </button>
+        </div>
+      </section>
+
+      <section id="yearSelect" class="card hidden">
+        <span class="badge">YEAR</span>
+        <h2>年度を選択</h2>
+        <p class="subtitle">現在はUI確認用のサンプル問題で動作します。</p>
+        <div class="year-list">
+          <button class="year-btn" onclick="startQuiz('2020年')">2020</button>
+          <button class="year-btn" onclick="startQuiz('2021年')">2021</button>
+          <button class="year-btn" onclick="startQuiz('2022年')">2022</button>
+          <button class="year-btn" onclick="startQuiz('2023年')">2023</button>
+          <button class="year-btn" onclick="startQuiz('2024年')">2024</button>
+          <button class="year-btn" onclick="startQuiz('2025年')">2025</button>
+        </div>
+        <div class="actions">
+          <button class="ghost-btn" onclick="goHome()">戻る</button>
+        </div>
+      </section>
+
+      <section id="quiz" class="card hidden">
+        <div class="topline">
+          <span id="modeLabel">2020年</span>
+          <span id="countLabel">1 / 3</span>
+        </div>
+        <div class="progress-wrap"><div id="progress" class="progress"></div></div>
+        <div class="question-meta">
+          <span class="pill" id="yearPill">2020</span>
+          <span class="pill" id="fieldPill">天然繊維</span>
+          <span class="pill">科目1</span>
+        </div>
+        <p id="questionText" class="question"></p>
+        <div id="choices" class="choices"></div>
+        <div id="feedback" class="feedback hidden"></div>
+        <div class="actions">
+          <button id="nextBtn" class="main-btn hidden" onclick="nextQuestion()">次の問題へ</button>
+          <button class="ghost-btn" onclick="goHome()">ホームへ戻る</button>
+        </div>
+      </section>
+
+      <section id="result" class="card hidden">
+        <span class="badge">RESULT</span>
+        <h2>学習結果</h2>
+        <div id="scoreText" class="result-score">0 / 0</div>
+        <p id="resultNote" class="result-note"></p>
+        <div class="summary-box">
+          <div class="summary-item"><strong id="totalNum">0</strong><span>出題数</span></div>
+          <div class="summary-item"><strong id="correctNum">0</strong><span>正解数</span></div>
+          <div class="summary-item"><strong id="rateNum">0%</strong><span>正答率</span></div>
+        </div>
+        <div class="actions">
+          <button class="main-btn" onclick="restartQuiz()">もう一度解く</button>
+          <button class="ghost-btn" onclick="goHome()">ホームへ戻る</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        year: 2020,
+        field: "天然繊維",
+        question: "綿繊維の一般的な特徴として、最も適切なものはどれか。",
+        choices: ["吸湿性が比較的高い", "熱可塑性が非常に高い", "水をほとんど吸わない", "羊毛よりもフェルト化しやすい"],
+        answer: 0,
+        explanation: "綿はセルロース系の天然繊維で、吸湿性が比較的高いことが特徴です。熱可塑性が高いのは主に合成繊維で意識する視点です。"
+      },
+      {
+        year: 2021,
+        field: "化学繊維",
+        question: "ポリエステル繊維の特徴として、最も適切なものはどれか。",
+        choices: ["虫害を受けやすい", "しわになりにくく、寸法安定性がよい", "水に溶けやすい", "主成分はタンパク質である"],
+        answer: 1,
+        explanation: "ポリエステルは合成繊維で、しわになりにくく寸法安定性に優れます。主成分がタンパク質なのは羊毛や絹の整理で押さえます。"
+      },
+      {
+        year: 2022,
+        field: "繊維性能",
+        question: "繊維製品の吸湿性に関する説明として、最も適切なものはどれか。",
+        choices: ["吸湿性は着用快適性に関係しない", "一般に親水性繊維は吸湿しやすい", "すべての合成繊維は吸湿性が高い", "吸湿性は染色性と無関係である"],
+        answer: 1,
+        explanation: "親水性の高い繊維は水分を取り込みやすく、着用快適性や染色性の理解にも関係します。"
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let selectedMode = "2020年";
+    let answered = false;
+
+    const screens = ["home", "yearSelect", "quiz", "result"];
+
+    function showScreen(id) {
+      screens.forEach(screen => document.getElementById(screen).classList.add("hidden"));
+      document.getElementById(id).classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function goHome() {
+      showScreen("home");
+    }
+
+    function showYearSelect() {
+      showScreen("yearSelect");
+    }
+
+    function startQuiz(mode) {
+      selectedMode = mode;
+      current = 0;
+      score = 0;
+      answered = false;
+      showScreen("quiz");
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      answered = false;
+      const q = questions[current];
+      document.getElementById("modeLabel").textContent = selectedMode;
+      document.getElementById("countLabel").textContent = `${current + 1} / ${questions.length}`;
+      document.getElementById("progress").style.width = `${((current + 1) / questions.length) * 100}%`;
+      document.getElementById("yearPill").textContent = q.year;
+      document.getElementById("fieldPill").textContent = q.field;
+      document.getElementById("questionText").textContent = q.question;
+      document.getElementById("feedback").classList.add("hidden");
+      document.getElementById("nextBtn").classList.add("hidden");
+
+      const choices = document.getElementById("choices");
+      choices.innerHTML = "";
+      q.choices.forEach((choice, index) => {
+        const btn = document.createElement("button");
+        btn.className = "choice";
+        btn.onclick = () => answerQuestion(index);
+        btn.innerHTML = `<span class="choice-mark">${String.fromCharCode(65 + index)}</span><span>${choice}</span>`;
+        choices.appendChild(btn);
+      });
+    }
+
+    function answerQuestion(index) {
+      if (answered) return;
+      answered = true;
+      const q = questions[current];
+      const isCorrect = index === q.answer;
+      if (isCorrect) score++;
+
+      const choiceButtons = document.querySelectorAll(".choice");
+      choiceButtons.forEach((btn, i) => {
+        if (i === q.answer) btn.classList.add("correct");
+        if (i === index && !isCorrect) btn.classList.add("wrong");
+      });
+
+      const feedback = document.getElementById("feedback");
+      feedback.classList.remove("hidden");
+      feedback.innerHTML = `
+        <h3>${isCorrect ? "⭕ 正解です" : "❌ 惜しいです"}</h3>
+        <p>${q.explanation}</p>
+      `;
+      document.getElementById("nextBtn").classList.remove("hidden");
+    }
+
+    function nextQuestion() {
+      if (current < questions.length - 1) {
+        current++;
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const total = questions.length;
+      const rate = Math.round((score / total) * 100);
+      document.getElementById("scoreText").textContent = `${score} / ${total}`;
+      document.getElementById("totalNum").textContent = total;
+      document.getElementById("correctNum").textContent = score;
+      document.getElementById("rateNum").textContent = `${rate}%`;
+      document.getElementById("resultNote").textContent = rate >= 80
+        ? "かなり良い仕上がりです。次は解説を読んで知識を固めましょう。"
+        : "間違えた問題を中心に復習すると、得点が安定します。";
+      showScreen("result");
+    }
+
+    function restartQuiz() {
+      startQuiz(selectedMode);
+    }
+  </script>
+</body>
+</html>
