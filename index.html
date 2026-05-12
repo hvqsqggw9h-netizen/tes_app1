@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TES 科目1 過去問アプリ</title>
+  <title>TES 科目1 学習アプリ</title>
   <style>
     :root {
       --bg: #f6f7fb;
@@ -28,26 +28,10 @@
       min-height: 100vh;
     }
 
-    .app {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 24px;
-    }
+    .app { max-width: 980px; margin: 0 auto; padding: 24px; }
+    .hidden { display: none !important; }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 22px;
-    }
-
-    .brand {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
+    header { margin-bottom: 22px; }
     .badge {
       display: inline-flex;
       width: fit-content;
@@ -56,129 +40,57 @@
       background: var(--primary-soft);
       color: var(--primary);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       padding: 5px 10px;
+      margin-bottom: 10px;
     }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(24px, 4vw, 40px);
-      letter-spacing: -0.04em;
-    }
-
-    .subtitle {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.7;
-    }
+    h1 { margin: 0; font-size: clamp(26px, 5vw, 42px); letter-spacing: -0.04em; }
+    h2 { margin-top: 12px; font-size: clamp(22px, 4vw, 32px); }
+    .subtitle { color: var(--muted); line-height: 1.7; margin: 8px 0 0; }
 
     .card {
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.94);
       border: 1px solid rgba(229,231,235,0.9);
       border-radius: 28px;
       padding: 24px;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(8px);
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 18px;
-    }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
 
-    .mode, .year-btn, .choice, .main-btn, .ghost-btn {
+    button { font: inherit; }
+    .mode, .choice, .main-btn, .ghost-btn {
       border: 1px solid var(--border);
       background: var(--card);
       border-radius: 18px;
       padding: 16px;
       cursor: pointer;
-      font: inherit;
       text-align: left;
-      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
+      transition: .15s ease;
     }
 
-    .mode:hover, .year-btn:hover, .choice:hover, .ghost-btn:hover {
+    .mode:hover, .choice:hover, .ghost-btn:hover {
       transform: translateY(-2px);
       border-color: #93c5fd;
       box-shadow: 0 10px 24px rgba(37, 99, 235, .1);
     }
 
-    .mode strong {
-      display: block;
-      font-size: 17px;
-      margin-bottom: 6px;
-    }
+    .mode strong { display: block; font-size: 17px; margin-bottom: 6px; }
+    .mode span { color: var(--muted); font-size: 13px; line-height: 1.5; }
 
-    .mode span, .year-btn span {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-    }
+    .topline { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); margin-bottom: 16px; }
+    .progress-wrap { height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden; margin-bottom: 22px; }
+    .progress { height: 100%; width: 0%; background: var(--primary); border-radius: 999px; transition: width .2s ease; }
 
-    .year-list {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .year-btn {
-      text-align: center;
-      font-weight: 800;
-    }
-
-    .hidden { display: none !important; }
-
-    .topline {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 18px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .progress-wrap {
-      height: 10px;
-      background: #e5e7eb;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-bottom: 22px;
-    }
-
-    .progress {
-      height: 100%;
-      width: 0%;
-      background: var(--primary);
-      border-radius: 999px;
-      transition: width .25s ease;
-    }
-
-    .question-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .pill {
-      border-radius: 999px;
-      background: #f3f4f6;
-      color: #374151;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 10px;
-    }
+    .question-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .pill { border-radius: 999px; background: #f3f4f6; color: #374151; font-size: 12px; font-weight: 800; padding: 6px 10px; }
 
     .question {
       font-size: clamp(20px, 3vw, 28px);
       line-height: 1.55;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      font-weight: 900;
+      letter-spacing: -0.03em;
       margin: 0 0 20px;
     }
 
@@ -193,201 +105,81 @@
     .question-image img {
       display: block;
       width: 100%;
-      max-height: 360px;
+      max-height: 420px;
       object-fit: contain;
       border-radius: 14px;
       background: white;
     }
 
-    .image-caption {
-      margin: 10px 2px 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-    }
+    .image-caption { margin: 10px 2px 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .choices { display: grid; gap: 12px; }
 
-    .choices {
-      display: grid;
-      gap: 12px;
-    }
+    .choice { display: flex; gap: 12px; align-items: flex-start; font-weight: 800; line-height: 1.55; }
+    .choice-mark { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: #f3f4f6; color: #374151; font-size: 13px; }
+    .choice.correct { border-color: #86efac; background: #f0fdf4; color: #14532d; }
+    .choice.wrong { border-color: #fecaca; background: #fef2f2; color: #7f1d1d; }
 
-    .choice {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      font-weight: 700;
-      line-height: 1.55;
-    }
+    .feedback { margin-top: 18px; border-radius: 20px; padding: 18px; background: #f8fafc; border: 1px solid var(--border); }
+    .feedback h3 { margin: 0 0 8px; font-size: 18px; }
+    .feedback p { margin: 0; line-height: 1.8; color: #374151; }
 
-    .choice-mark {
-      flex: 0 0 auto;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: #f3f4f6;
-      color: #374151;
-      font-size: 13px;
-    }
+    .actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .main-btn { background: var(--primary); color: white; border-color: var(--primary); font-weight: 900; text-align: center; }
+    .ghost-btn { font-weight: 900; text-align: center; background: white; }
 
-    .choice.correct {
-      border-color: #86efac;
-      background: #f0fdf4;
-      color: #14532d;
-    }
-
-    .choice.wrong {
-      border-color: #fecaca;
-      background: #fef2f2;
-      color: #7f1d1d;
-    }
-
-    .feedback {
-      margin-top: 18px;
-      border-radius: 20px;
-      padding: 18px;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-    }
-
-    .feedback h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
-    }
-
-    .feedback p {
-      margin: 0;
-      line-height: 1.8;
-      color: #374151;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-
-    .main-btn {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-      font-weight: 800;
-      text-align: center;
-    }
-
-    .ghost-btn {
-      font-weight: 800;
-      text-align: center;
-      background: white;
-    }
-
-    .result-score {
-      font-size: clamp(42px, 8vw, 72px);
-      font-weight: 900;
-      letter-spacing: -0.06em;
-      margin: 8px 0 4px;
-    }
-
-    .result-note {
-      color: var(--muted);
-      line-height: 1.8;
-      margin: 0 0 18px;
-    }
-
-    .summary-box {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin: 18px 0;
-    }
-
-    .summary-item {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 14px;
-    }
-
-    .summary-item strong {
-      display: block;
-      font-size: 24px;
-    }
-
-    .summary-item span {
-      color: var(--muted);
-      font-size: 13px;
-    }
+    .result-score { font-size: clamp(42px, 8vw, 72px); font-weight: 900; letter-spacing: -0.06em; margin: 8px 0 4px; }
+    .summary-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+    .summary-item { background: #f8fafc; border: 1px solid var(--border); border-radius: 18px; padding: 14px; }
+    .summary-item strong { display: block; font-size: 24px; }
+    .summary-item span { color: var(--muted); font-size: 13px; }
 
     @media (max-width: 760px) {
       .app { padding: 16px; }
-      header { align-items: flex-start; flex-direction: column; }
       .grid, .summary-box { grid-template-columns: 1fr; }
-      .year-list { grid-template-columns: repeat(3, 1fr); }
       .card { padding: 18px; border-radius: 22px; }
-      .topline { align-items: flex-start; flex-direction: column; }
+      .topline { flex-direction: column; }
     }
   </style>
 </head>
 <body>
   <div class="app">
     <header>
-      <div class="brand">
-        <span class="badge">TES Learning App</span>
-        <h1>科目1 繊維に関する一般知識</h1>
-        <p class="subtitle">まずは2020年の科目1を完成させ、その後2021〜2025年へ展開します。</p>
-      </div>
+      <span class="badge">TES Learning App</span>
+      <h1>科目1 繊維に関する一般知識</h1>
+      <p class="subtitle">2020年の科目1を、1問ずつ理解して積み上げる学習アプリです。</p>
     </header>
 
     <main>
       <section id="home" class="card">
-        <span class="badge">STEP 1</span>
+        <span class="badge">2020</span>
         <h2>2020年 科目1を学習</h2>
-        <p class="subtitle">問1をA〜Lに分解し、1問ずつ解いて理解を積み上げる形式です。</p>
+        <p class="subtitle">問1〜問6まで対応中。図解付き問題も追加しています。</p>
         <div class="grid">
-          <button class="mode" onclick="startQuiz('2020年 問1')">
-            <strong>2020年 問1を解く</strong>
-            <span>繊維分類・絹・繊維物性・耐薬品性を学習</span>
+          <button class="mode" onclick="startQuiz('2020年 問1〜問6')">
+            <strong>問1〜問6を解く</strong>
+            <span>繊維分類・繊維物性・糸・織物・編物まで</span>
+          </button>
+          <button class="mode" onclick="startQuiz('2020年 図解あり')">
+            <strong>図解問題を含めて復習</strong>
+            <span>海島型・紡糸法・編物図を見ながら理解</span>
           </button>
           <button class="mode" onclick="startQuiz('2020年 ランダム')">
             <strong>ランダム復習</strong>
-            <span>2020年問1の12問をテンポよく確認</span>
+            <span>今後、苦手問題保存にも対応予定</span>
           </button>
-          <button class="mode" onclick="startQuiz('2020年 苦手復習')">
-            <strong>苦手復習</strong>
-            <span>今後、間違えた問題を保存して復習できるようにします</span>
-          </button>
-        </div>
-      </section>
-
-      <section id="yearSelect" class="card hidden">
-        <span class="badge">YEAR</span>
-        <h2>年度を選択</h2>
-        <p class="subtitle">現在はUI確認用のサンプル問題で動作します。</p>
-        <div class="year-list">
-          <button class="year-btn" onclick="startQuiz('2020年')">2020</button>
-          <button class="year-btn" disabled style="opacity:.45; cursor:not-allowed;">2021</button>
-          <button class="year-btn" disabled style="opacity:.45; cursor:not-allowed;">2022</button>
-          <button class="year-btn" disabled style="opacity:.45; cursor:not-allowed;">2023</button>
-          <button class="year-btn" disabled style="opacity:.45; cursor:not-allowed;">2024</button>
-          <button class="year-btn" disabled style="opacity:.45; cursor:not-allowed;">2025</button>
-        </div>
-        <div class="actions">
-          <button class="ghost-btn" onclick="goHome()">戻る</button>
         </div>
       </section>
 
       <section id="quiz" class="card hidden">
         <div class="topline">
           <span id="modeLabel">2020年</span>
-          <span id="countLabel">1 / 3</span>
+          <span id="countLabel">1 / 1</span>
         </div>
         <div class="progress-wrap"><div id="progress" class="progress"></div></div>
         <div class="question-meta">
           <span class="pill" id="yearPill">2020</span>
-          <span class="pill" id="fieldPill">天然繊維</span>
-          <span class="pill">科目1</span>
+          <span class="pill" id="fieldPill">分野</span>
+          <span class="pill" id="sourcePill">問</span>
         </div>
         <p id="questionText" class="question"></p>
         <div id="questionImage" class="question-image hidden"></div>
@@ -403,7 +195,7 @@
         <span class="badge">RESULT</span>
         <h2>学習結果</h2>
         <div id="scoreText" class="result-score">0 / 0</div>
-        <p id="resultNote" class="result-note"></p>
+        <p id="resultNote" class="subtitle"></p>
         <div class="summary-box">
           <div class="summary-item"><strong id="totalNum">0</strong><span>出題数</span></div>
           <div class="summary-item"><strong id="correctNum">0</strong><span>正解数</span></div>
@@ -419,532 +211,72 @@
 
   <script>
     const questions = [
-      {
-        year: 2020,
-        sourceQuestion: "問1-A",
-        field: "繊維分類",
-        question: "繊維は、天然繊維と、人工的に製造する［A］に分類される。［A］に入る語句として最も適切なものはどれか。",
-        choices: ["合成繊維", "化学繊維", "無機繊維"],
-        answer: 1,
-        explanation: "正解は「化学繊維」。人工的に製造される繊維の総称として押さえます。合成繊維は化学繊維の一部です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問1-B",
-        field: "絹",
-        question: "絹は、主として家蚕の繭から採取される繊維で、長さは［B］を超え、天然繊維では希少な長繊維である。［B］に入る語句はどれか。",
-        choices: ["10m", "100m", "1,000m"],
-        answer: 2,
-        explanation: "正解は「1,000m」。絹は天然繊維では珍しいフィラメント、つまり長繊維として出題されやすいポイントです。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問1-C",
-        field: "絹",
-        question: "精練した絹の主成分は［C］である。［C］に入る語句として最も適切なものはどれか。",
-        choices: ["ケラチン", "フィブロイン", "セリシン"],
-        answer: 1,
-        explanation: "正解は「フィブロイン」。セリシンは精練で除去される成分、ケラチンは羊毛などで押さえるタンパク質です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問1-D",
-        field: "繊維高分子",
-        question: "絹は羊毛繊維と同じく、分子の主鎖に［D］を有している。［D］に入る結合はどれか。",
-        choices: ["－CO・O－", "－O－", "－NH・CO－"],
-        answer: 2,
-        explanation: "正解は「－NH・CO－」。これはアミド結合で、タンパク質系繊維の理解に関係します。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問1-E",
-        field: "繊維物性",
-        question: "繊維の断面形状が真円形である場合、直径を1/3にすると曲げ剛性は［E］となる。［E］に入る値はどれか。",
-        choices: ["1/9", "1/27", "1/81"],
-        answer: 2,
-        explanation: "正解は「1/81」。曲げ剛性は直径の4乗に比例するため、直径が1/3になると 1/3⁴ = 1/81 になります。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問1-F",
-        field: "繊維物性",
-        question: "繊維を細くすると、繊維集合体では隙間が細分化されることから［F］が向上する効果も得られる。［F］に入る語句はどれか。",
-        choices: ["吸水性", "吸湿性", "染色性"],
-        answer: 0,
-        explanation: "正解は「吸水性」。細繊化により毛細管効果が高まり、水を吸い上げやすくなる点がポイントです。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問1-G",
-        field: "複合繊維",
-        question: "直接的に紡糸できる限界以下の細さの繊維を製造するために、［G］複合繊維による方法が開発されている。［G］に入る語句はどれか。",
-        choices: ["サイドバイサイド型", "芯鞘型", "海島型"],
-        answer: 2,
-        explanation: "正解は「海島型」。海成分を溶解除去して、島成分を極細繊維として得る方法です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問1-H",
-        field: "熱的性質",
-        question: "結晶化度の低い高分子、例えばアクリルなどでは［H］を超えると急激に軟化する。［H］に入る語句はどれか。",
-        choices: ["ガラス転移温度", "融解温度", "分解温度"],
-        answer: 0,
-        explanation: "正解は「ガラス転移温度」。非晶部の分子運動が活発になり、硬い状態から軟らかい状態へ変わる温度です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問1-I",
-        field: "熱的性質",
-        question: "結晶化度の高い高分子、例えばポリエステルなどでは［I］近くになると急激に軟化する。［I］に入る語句はどれか。",
-        choices: ["ガラス転移温度", "融解温度", "分解温度"],
-        answer: 1,
-        explanation: "正解は「融解温度」。結晶性の高い高分子では、結晶部分が融ける温度付近で急激な軟化が起こります。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問1-J",
-        field: "耐薬品性",
-        question: "綿や麻は［J］に溶解する。［J］に入る薬品として最も適切なものはどれか。",
-        choices: ["酸化銅アンモニア溶液", "ベンゼン", "エタノール"],
-        answer: 0,
-        explanation: "正解は「酸化銅アンモニア溶液」。綿や麻の主成分であるセルロースを溶かす溶剤として押さえます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問1-K",
-        field: "耐薬品性",
-        question: "絹は［K］に溶解する。［K］に入る薬品として最も適切なものはどれか。",
-        choices: ["35％塩酸水溶液", "キシレン", "アセトン"],
-        answer: 0,
-        explanation: "正解は「35％塩酸水溶液」。絹はタンパク質系繊維であり、強酸に対する性質が問われています。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問1-L",
-        field: "耐薬品性",
-        question: "アクリルは40〜50℃の［L］に溶解する。［L］に入る薬品として最も適切なものはどれか。",
-        choices: ["氷酢酸", "ジメチルホルムアミド", "5％水酸化ナトリウム水溶液"],
-        answer: 1,
-        explanation: "正解は「ジメチルホルムアミド」。アクリルの溶剤としてDMFを覚えておくと、耐薬品性の問題で対応しやすくなります。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問2-A",
-        field: "比強度",
-        question: "通常の衣料用繊維の場合、綿・レーヨン・ポリエステルを比強度の大きい順に並べたものとして最も適切なのはどれか。",
-        choices: [
-          "綿 ＞ レーヨン ＞ ポリエステル",
-          "綿 ＞ ポリエステル ＞ レーヨン",
-          "レーヨン ＞ 綿 ＞ ポリエステル",
-          "ポリエステル ＞ 綿 ＞ レーヨン"
-        ],
-        answer: 3,
-        explanation: "正解は『ポリエステル ＞ 綿 ＞ レーヨン』。ポリエステルは合成繊維で強度が高く、レーヨンは湿潤時に強度低下しやすい点も重要です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問2-B",
-        field: "吸湿性",
-        question: "繊維の水分率（％）を表す式として最も適切なものはどれか。",
-        choices: [
-          "〔（W－W′）／W〕×100",
-          "〔（W－W′）／W′〕×100",
-          "〔（W′－W）／W′〕×100"
-        ],
-        answer: 1,
-        explanation: "正解は『〔（W－W′）／W′〕×100』。Wは乾燥前質量、W′は絶乾状態質量です。TESでは公式暗記だけでなく、意味理解も重要です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問2-C",
-        field: "吸湿性",
-        question: "羊毛・ナイロン・アクリルを、標準状態における水分率の高い順に並べたものとして最も適切なのはどれか。",
-        choices: [
-          "羊毛 ＞ ナイロン ＞ アクリル",
-          "羊毛 ＞ アクリル ＞ ナイロン",
-          "ナイロン ＞ 羊毛 ＞ アクリル",
-          "アクリル ＞ ナイロン ＞ 羊毛"
-        ],
-        answer: 0,
-        explanation: "正解は『羊毛 ＞ ナイロン ＞ アクリル』。羊毛は吸湿性が非常に高い天然繊維であり、アクリルは比較的吸湿性が低い点を押さえます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問2-D",
-        field: "引張特性",
-        question: "初期引張抵抗度とは、繊維の荷重－伸長曲線のどの値を指すか。",
-        choices: [
-          "切断時の荷重",
-          "切断時の伸び率",
-          "原点付近の接線の勾配"
-        ],
-        answer: 2,
-        explanation: "正解は『原点付近の接線の勾配』。初期引張抵抗度は、糸や布の“こし”や“硬さ感”にも関係する重要項目です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問2-E",
-        field: "耐熱性",
-        question: "ナイロン・ポリエステル・ポリプロピレンを、融解温度の高い順に並べたものとして最も適切なのはどれか。",
-        choices: [
-          "ナイロン ＞ ポリプロピレン ＞ ポリエステル",
-          "ナイロン ＞ ポリエステル ＞ ポリプロピレン",
-          "ポリエステル ＞ ナイロン ＞ ポリプロピレン",
-          "ポリプロピレン ＞ ポリエステル ＞ ナイロン"
-        ],
-        answer: 2,
-        explanation: "正解は『ポリエステル ＞ ナイロン ＞ ポリプロピレン』。TESでは融解温度＝耐熱性の比較問題が頻出です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問3-A",
-        field: "高分子",
-        question: "高分子化合物において、構成するモノマーの繰り返し数を何と呼ぶか。",
-        choices: ["ポリマー分子量", "重合度", "結晶化度"],
-        answer: 1,
-        explanation: "正解は『重合度』。モノマーが何個つながっているかを示す考え方です。分子量や結晶化度とは区別して押さえます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問3-B",
-        field: "綿",
-        question: "綿は、綿植物のどの部分から採取した繊維か。",
-        choices: ["種子", "葉脈", "靭皮"],
-        answer: 0,
-        explanation: "正解は『種子』。綿は種子毛です。麻が靭皮繊維として出題されやすいため、綿＝種子毛、麻＝靭皮繊維で整理します。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問3-C",
-        field: "綿",
-        question: "綿の主成分として最も適切なものはどれか。",
-        choices: ["リグニン", "ヘミセルロース", "セルロース"],
-        answer: 2,
-        explanation: "正解は『セルロース』。綿はセルロース系天然繊維です。リグニンやヘミセルロースは植物繊維の周辺成分として整理します。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問3-D",
-        field: "再生繊維",
-        question: "再生繊維であるレーヨンの成分は、どの天然繊維と同じ成分か。",
-        choices: ["羊毛", "綿", "絹"],
-        answer: 1,
-        explanation: "正解は『綿』。レーヨンはセルロースを原料とする再生繊維で、成分としては綿と同じセルロース系です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問3-E",
-        field: "合成繊維",
-        question: "ポリエチレンテレフタレート繊維、つまりPETは、どの結合をもつ鎖状高分子からなる繊維か。",
-        choices: ["エステル結合", "アミド結合", "水素結合"],
-        answer: 0,
-        explanation: "正解は『エステル結合』。ポリエステルという名称どおり、主鎖にエステル結合をもつ合成繊維です。ナイロンのアミド結合と対比して覚えます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問3-F",
-        field: "バイオマス繊維",
-        question: "合成繊維であるポリ乳酸の原料には、バイオマスの主に何のでんぷんが利用されているか。",
-        choices: ["サツマイモ", "トウモロコシ", "米"],
-        answer: 1,
-        explanation: "正解は『トウモロコシ』。ポリ乳酸はバイオマス由来繊維として出題されやすく、トウモロコシのでんぷんが代表的原料です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問3-G",
-        field: "紡糸法",
-        question: "レーヨンは、主にどの紡糸方法により製造されているか。",
-        choices: ["乾式紡糸", "湿式紡糸", "溶融紡糸"],
-        answer: 1,
-        explanation: "正解は『湿式紡糸』。レーヨンは溶液を凝固浴中で繊維化する湿式紡糸で製造されます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問3-H",
-        field: "紡糸法",
-        question: "ナイロンは、主にどの紡糸方法により製造されているか。",
-        choices: ["乾式紡糸", "湿式紡糸", "溶融紡糸"],
-        answer: 2,
-        explanation: "正解は『溶融紡糸』。ナイロンは熱で溶かしてノズルから押し出し、冷却して繊維化します。ポリエステルも溶融紡糸で整理できます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問4-A",
-        field: "糸の種類",
-        question: "糸中に玉・節をあらわし、色糸を使用する飾り糸として最も適切なものはどれか。",
-        choices: ["モール糸", "ノップヤーン", "ループヤーン"],
-        answer: 1,
-        explanation: "正解は『ノップヤーン』。糸の中に玉状・節状の部分を作った装飾糸です。ループヤーンは輪状のループ、モール糸は毛羽状の装飾で整理します。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問4-B",
-        field: "紡毛紡績",
-        question: "紡毛紡績で、硫酸を用いて原料に含まれる植物性不純物を除去する工程はどれか。",
-        choices: ["化炭処理", "カーディング", "コーミング"],
-        answer: 0,
-        explanation: "正解は『化炭処理』。羊毛などに混じる植物質を酸で炭化させて除去する工程です。カーディングやコーミングとは目的が異なります。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問4-C",
-        field: "番手",
-        question: "1kgの紡毛糸の長さが700,000cmである場合、メートル番手として最も適切なのはどれか。",
-        choices: ["7番手", "70番手", "700番手"],
-        answer: 1,
-        explanation: "正解は『70番手』。700,000cmは7,000m、1kgは1,000gなので、メートル番手は 7,000m ÷ 1,000g = 70 です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問4-D",
-        field: "繊度",
-        question: "1dtexの糸の100m分の質量として最も適切なものはどれか。",
-        choices: ["1g", "0.1g", "0.01g"],
-        answer: 1,
-        explanation: "正解は『0.1g』。dtexは10,000mあたりのグラム数です。1dtexは10,000mで1gなので、100mでは0.01g……ではなく、問題の解答例では0.1gとされています。※ここは原資料の解答に合わせています。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問4-E",
-        field: "糸のかさ高性",
-        question: "糸のかさ高性を評価できるパッキングファクタは、何を繊維の密度で除して算出されるか。",
-        choices: ["糸の見掛けの密度", "含気率（空隙率）", "糸のメートル番手"],
-        answer: 0,
-        explanation: "正解は『糸の見掛けの密度』。パッキングファクタは、糸の中に繊維がどの程度詰まっているかを見る指標です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問4-F",
-        field: "加工糸",
-        question: "エアジェット加工によりフィラメント相互の配置を入れ替え、交絡部を形成した糸を何というか。",
-        choices: ["クレープ糸", "インターレース糸", "シェニール糸"],
-        answer: 1,
-        explanation: "正解は『インターレース糸』。高速空気流でフィラメントを交絡させた糸です。加工糸の名称問題として押さえます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問4-G",
-        field: "特殊糸",
-        question: "プラスチックフィルムを延伸した後、一定の幅で切断して得られる糸を何というか。",
-        choices: ["スリットヤーン", "ラッピングヤーン", "スプリットヤーン"],
-        answer: 0,
-        explanation: "正解は『スリットヤーン』。フィルムを細く切り裂いて糸状にしたものです。名称から“スリット＝切れ目”で覚えると定着しやすいです。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問4-H",
-        field: "糸表示",
-        question: "20番手の綿糸で双糸を作った場合、JIS上の表示として最も適切なものはどれか。",
-        choices: ["2／20", "20／2s", "2s／20"],
-        answer: 0,
-        explanation: "正解は『2／20』。綿番手の双糸表示として、引きそろえ本数と単糸番手の関係を整理します。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問4-I",
-        field: "糸表示",
-        question: "メートル番手で20番手の単糸の場合、表示として最も適切なものはどれか。",
-        choices: ["1／20", "20／1", "1s／20"],
-        answer: 1,
-        explanation: "正解は『20／1』。メートル番手の単糸表示です。Hの綿番手表示と混同しやすいので、表示形式の違いを意識します。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問4-J",
-        field: "糸表示",
-        question: "20テックスの単糸を2本引きそろえた場合、表示として最も適切なものはどれか。",
-        choices: ["20tex×2", "20×2／tex", "20tex／2"],
-        answer: 0,
-        explanation: "正解は『20tex×2』。tex表示では、単糸の太さと本数を掛け合わせる形で表示します。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問5-A",
-        field: "織物組織",
-        question: "平織の毛織物として最も適切なものはどれか。",
-        choices: ["ギャバジン", "ポーラ", "キャラコ"],
-        answer: 1,
-        explanation: "正解は『ポーラ』。ポーラは平織の毛織物として整理します。ギャバジンは綾織系、キャラコは平織の綿織物として混同しやすい語です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問5-B",
-        field: "織物組織",
-        question: "たて方向、あるいは、よこ方向にうねが現れる織物組織は、どの組織の変化組織か。",
-        choices: ["平織", "綾織（斜文織）", "朱子織"],
-        answer: 1,
-        explanation: "正解は『綾織（斜文織）』。うねや斜めの筋が出る組織として、綾織の特徴を押さえます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問5-C",
-        field: "織物組織",
-        question: "蜂巣織などのように、基本組織・変化組織・混合組織に分類できない組織を何というか。",
-        choices: ["複雑組織", "特別組織", "均衡組織"],
-        answer: 1,
-        explanation: "正解は『特別組織』。蜂巣織は特別組織の代表例として覚えると整理しやすいです。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問5-D",
-        field: "綿織物",
-        question: "平織の綿織物として最も適切なものはどれか。",
-        choices: ["金巾", "デニム", "ドスキン"],
-        answer: 0,
-        explanation: "正解は『金巾』。金巾は平織の綿織物です。デニムは綾織、ドスキンは毛織物として整理します。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問5-E",
-        field: "織物組織",
-        question: "完全組織がたて・よこ5本以上の糸でつくられる基本組織で、糸の屈曲が少なく、密に並べられ、糸相互の拘束が少ない組織はどれか。",
-        choices: ["朱子織", "模紗織", "マット織"],
-        answer: 0,
-        explanation: "正解は『朱子織』。朱子織は糸の浮きが多く、屈曲が少ないため、光沢やなめらかさが出やすい組織です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問5-F",
-        field: "織物組織",
-        question: "組、紗などの組織は、別名で何と呼ばれるか。",
-        choices: ["からみ組織", "二重組織", "変化組織"],
-        answer: 0,
-        explanation: "正解は『からみ組織』。たて糸同士をからませることで、目の粗い組織や透け感のある組織を作ります。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問5-G",
-        field: "毛織物",
-        question: "斜文織の毛織物として最も適切なものはどれか。",
-        choices: ["トロピカル", "ドスキン", "サージ"],
-        answer: 2,
-        explanation: "正解は『サージ』。サージは斜文織の毛織物として出題されやすい名称です。トロピカルやドスキンとの分類差を押さえます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問5-H",
-        field: "絹織物",
-        question: "朱子織を利用した絹織物として最も適切なものはどれか。",
-        choices: ["タフタ", "綸子", "綾羽二重"],
-        answer: 1,
-        explanation: "正解は『綸子』。綸子は朱子組織を利用した絹織物です。名称だけでなく、どの組織に属するかで覚えると実戦向きです。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問5-I",
-        field: "パイル織物",
-        question: "別珍では、パイルを密集させるためにどのパイルのみで構成されるか。",
-        choices: ["ファストパイル", "ループパイル", "ルーズパイル"],
-        answer: 0,
-        explanation: "正解は『ファストパイル』。別珍はパイルを密集させる構造が特徴です。パイル織物の名称問題として押さえます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問5-J",
-        field: "織物組織図",
-        question: "設問中の組織図に該当するものとして、解答例で正しいとされているものはどれか。",
-        choices: ["a", "b", "c"],
-        answer: 0,
-        explanation: "正解は『a』。この問題は元資料の図を確認して判断するタイプです。アプリ上では図の追加が必要なため、今後、画像付き問題として強化できます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問6-A",
-        field: "編物",
-        question: "よこ編において、編目が横方向に連なった列を何というか。",
-        image: "2020/images/course_wale.png",
-        imageAlt: "コースとウェールの方向を示す編目図",
-        imageCaption: "横方向がコース、縦方向がウェールです。ここは最重要の基礎用語です。"
-        choices: ["ウェール", "コース", "ループ"],
-        answer: 1,
-        explanation: "正解は『コース』。横方向＝コース、縦方向＝ウェールはTES頻出です。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問6-B",
-        field: "編物",
-        question: "たて編・よこ編に共通して、編目が縦方向に連なった列を何というか。",
-        image: "2020/images/course_wale.png",
-        imageAlt: "コースとウェールの方向を示す編目図",
-        imageCaption: "縦方向がウェールです。コースとセットで覚えると混乱しにくくなります。"
-        choices: ["ループ", "ウェール", "コース"],
-        answer: 1,
-        explanation: "正解は『ウェール』。編物の方向名称は図問題とセットで問われやすいです。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問6-C",
-        field: "編組織",
-        question: "シングルニットの基本組織で、耳まくれやランが発生しやすい組織はどれか。",
-        image: "2020/images/plain_knit.png",
-        imageAlt: "平編の構造図",
-        imageCaption: "平編は基本組織ですが、耳まくれ・ランが発生しやすい点が試験で狙われます。"
-        choices: ["平編", "ゴム編", "パール編"],
-        answer: 0,
-        explanation: "正解は『平編』。平編は最も基本的な編組織ですが、端部が丸まりやすい特徴があります。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問6-D",
-        field: "編組織",
-        question: "伸縮性に優れ、袖口や裾などにも多用される編組織はどれか。",
-        image: "2020/images/rib_knit.png",
-        imageAlt: "ゴム編の構造図",
-        imageCaption: "ゴム編はリブ編とも呼ばれ、伸縮性が大きいことが特徴です。"
-        choices: ["天竺編", "ガーター編", "ゴム編"],
-        answer: 2,
-        explanation: "正解は『ゴム編』。リブ編とも呼ばれ、伸縮性に優れるため衣料用途で非常に多く使用されます。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問6-E",
-        field: "編組織",
-        question: "表裏ともに同じ編目が現れ、横方向への伸縮性が大きい編組織はどれか。",
-        image: "2020/images/interlock_knit.png",
-        imageAlt: "両面編・インターロックの構造図",
-        imageCaption: "両面編は厚みと安定性があり、シングルニットとの比較で理解すると定着します。"
-        choices: ["平編", "両面編", "ゴム編"],
-        answer: 1,
-        explanation: "正解は『両面編』。ダブルニット系組織として、厚みや安定性が高い特徴があります。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問6-F",
-        field: "編物",
-        question: "編物で、編糸が切れて編目がほどけていく現象を何というか。",
-        choices: ["ピリング", "ラン", "スナッギング"],
-        answer: 1,
-        explanation: "正解は『ラン』。ストッキングなどで伝線状にほどける現象として知られています。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問6-G",
-        field: "たて編",
-        question: "たて編の代表的な組織として最も適切なものはどれか。",
-        choices: ["トリコット", "ゴム編", "鹿の子編"],
-        answer: 0,
-        explanation: "正解は『トリコット』。たて編はランしにくく、生地の安定性が高い特徴があります。"
-      },
-      {
-        year: 2020,
-        sourceQuestion: "問6-H",
-        field: "編物特性",
-        question: "平編の特徴として最も適切なものはどれか。",
-        image: "2020/images/plain_knit.png",
-        imageAlt: "平編の構造図",
-        imageCaption: "平編は基本組織ですが、ランしやすい・耳まくれしやすいという弱点もセットで覚えます。"
-        choices: ["耳まくれしにくい", "ランしやすい", "伸縮性がほとんどない"],
-        answer: 1,
-        explanation: "正解は『ランしやすい』。平編は端部の耳まくれやランが発生しやすい代表的組織です。"
-      }
+      { year:2020, sourceQuestion:"問1-A", field:"繊維分類", question:"繊維は、天然繊維と、人工的に製造する［A］に分類される。［A］に入る語句として最も適切なものはどれか。", choices:["合成繊維","化学繊維","無機繊維"], answer:1, explanation:"正解は『化学繊維』。人工的に製造される繊維の総称です。合成繊維は化学繊維の一部です。" },
+      { year:2020, sourceQuestion:"問1-B", field:"絹", question:"絹は、主として家蚕の繭から採取される繊維で、長さは［B］を超え、天然繊維では希少な長繊維である。［B］に入る語句はどれか。", choices:["10m","100m","1,000m"], answer:2, explanation:"正解は『1,000m』。絹は天然繊維では珍しいフィラメント、つまり長繊維です。" },
+      { year:2020, sourceQuestion:"問1-C", field:"絹", question:"精練した絹の主成分は［C］である。［C］に入る語句として最も適切なものはどれか。", choices:["ケラチン","フィブロイン","セリシン"], answer:1, explanation:"正解は『フィブロイン』。セリシンは精練で除去される成分、ケラチンは羊毛などで押さえるタンパク質です。" },
+      { year:2020, sourceQuestion:"問1-D", field:"繊維高分子", question:"絹は羊毛繊維と同じく、分子の主鎖に［D］を有している。［D］に入る結合はどれか。", choices:["－CO・O－","－O－","－NH・CO－"], answer:2, explanation:"正解は『－NH・CO－』。これはアミド結合で、タンパク質系繊維の理解に関係します。" },
+      { year:2020, sourceQuestion:"問1-E", field:"繊維物性", question:"繊維の断面形状が真円形である場合、直径を1/3にすると曲げ剛性は［E］となる。［E］に入る値はどれか。", choices:["1/9","1/27","1/81"], answer:2, explanation:"正解は『1/81』。曲げ剛性は直径の4乗に比例するため、直径が1/3になると1/81になります。" },
+      { year:2020, sourceQuestion:"問1-F", field:"繊維物性", question:"繊維を細くすると、繊維集合体では隙間が細分化されることから［F］が向上する効果も得られる。［F］に入る語句はどれか。", choices:["吸水性","吸湿性","染色性"], answer:0, explanation:"正解は『吸水性』。細繊化により毛細管効果が高まり、水を吸い上げやすくなります。" },
+      { year:2020, sourceQuestion:"問1-G", field:"複合繊維", question:"直接的に紡糸できる限界以下の細さの繊維を製造するために、［G］複合繊維による方法が開発されている。［G］に入る語句はどれか。", choices:["サイドバイサイド型","芯鞘型","海島型"], answer:2, image:"2020/images/sea_island.png", imageCaption:"海島型は、海成分を除去して島成分を極細繊維として取り出す考え方です。", explanation:"正解は『海島型』。海成分を溶解除去して、島成分を極細繊維として得る方法です。" },
+      { year:2020, sourceQuestion:"問1-H", field:"熱的性質", question:"結晶化度の低い高分子、例えばアクリルなどでは［H］を超えると急激に軟化する。［H］に入る語句はどれか。", choices:["ガラス転移温度","融解温度","分解温度"], answer:0, explanation:"正解は『ガラス転移温度』。非晶部の分子運動が活発になり、硬い状態から軟らかい状態へ変わる温度です。" },
+      { year:2020, sourceQuestion:"問1-I", field:"熱的性質", question:"結晶化度の高い高分子、例えばポリエステルなどでは［I］近くになると急激に軟化する。［I］に入る語句はどれか。", choices:["ガラス転移温度","融解温度","分解温度"], answer:1, explanation:"正解は『融解温度』。結晶部分が融ける温度付近で急激な軟化が起こります。" },
+      { year:2020, sourceQuestion:"問1-J", field:"耐薬品性", question:"綿や麻は［J］に溶解する。［J］に入る薬品として最も適切なものはどれか。", choices:["酸化銅アンモニア溶液","ベンゼン","エタノール"], answer:0, explanation:"正解は『酸化銅アンモニア溶液』。綿や麻の主成分であるセルロースを溶かす溶剤です。" },
+      { year:2020, sourceQuestion:"問1-K", field:"耐薬品性", question:"絹は［K］に溶解する。［K］に入る薬品として最も適切なものはどれか。", choices:["35％塩酸水溶液","キシレン","アセトン"], answer:0, explanation:"正解は『35％塩酸水溶液』。絹はタンパク質系繊維であり、強酸に対する性質が問われています。" },
+      { year:2020, sourceQuestion:"問1-L", field:"耐薬品性", question:"アクリルは40〜50℃の［L］に溶解する。［L］に入る薬品として最も適切なものはどれか。", choices:["氷酢酸","ジメチルホルムアミド","5％水酸化ナトリウム水溶液"], answer:1, explanation:"正解は『ジメチルホルムアミド』。アクリルの溶剤としてDMFを覚えます。" },
+
+      { year:2020, sourceQuestion:"問2-A", field:"比強度", question:"綿・レーヨン・ポリエステルを比強度の大きい順に並べたものとして最も適切なのはどれか。", choices:["綿 ＞ レーヨン ＞ ポリエステル","綿 ＞ ポリエステル ＞ レーヨン","レーヨン ＞ 綿 ＞ ポリエステル","ポリエステル ＞ 綿 ＞ レーヨン"], answer:3, explanation:"正解は『ポリエステル ＞ 綿 ＞ レーヨン』。ポリエステルは合成繊維で強度が高く、レーヨンは湿潤時に強度低下しやすい点も重要です。" },
+      { year:2020, sourceQuestion:"問2-B", field:"吸湿性", question:"繊維の水分率（％）を表す式として最も適切なものはどれか。", choices:["〔（W－W′）／W〕×100","〔（W－W′）／W′〕×100","〔（W′－W）／W′〕×100"], answer:1, explanation:"正解は『〔（W－W′）／W′〕×100』。Wは乾燥前質量、W′は絶乾状態質量です。" },
+      { year:2020, sourceQuestion:"問2-C", field:"吸湿性", question:"羊毛・ナイロン・アクリルを、標準状態における水分率の高い順に並べたものとして最も適切なのはどれか。", choices:["羊毛 ＞ ナイロン ＞ アクリル","羊毛 ＞ アクリル ＞ ナイロン","ナイロン ＞ 羊毛 ＞ アクリル","アクリル ＞ ナイロン ＞ 羊毛"], answer:0, explanation:"正解は『羊毛 ＞ ナイロン ＞ アクリル』。羊毛は吸湿性が高く、アクリルは比較的吸湿性が低い点を押さえます。" },
+      { year:2020, sourceQuestion:"問2-D", field:"引張特性", question:"初期引張抵抗度とは、繊維の荷重－伸長曲線のどの値を指すか。", choices:["切断時の荷重","切断時の伸び率","原点付近の接線の勾配"], answer:2, explanation:"正解は『原点付近の接線の勾配』。糸や布の“こし”や“硬さ感”にも関係します。" },
+      { year:2020, sourceQuestion:"問2-E", field:"耐熱性", question:"ナイロン・ポリエステル・ポリプロピレンを、融解温度の高い順に並べたものとして最も適切なのはどれか。", choices:["ナイロン ＞ ポリプロピレン ＞ ポリエステル","ナイロン ＞ ポリエステル ＞ ポリプロピレン","ポリエステル ＞ ナイロン ＞ ポリプロピレン","ポリプロピレン ＞ ポリエステル ＞ ナイロン"], answer:2, explanation:"正解は『ポリエステル ＞ ナイロン ＞ ポリプロピレン』。融解温度は耐熱性と関連します。" },
+
+      { year:2020, sourceQuestion:"問3-A", field:"高分子", question:"高分子化合物において、構成するモノマーの繰り返し数を何と呼ぶか。", choices:["ポリマー分子量","重合度","結晶化度"], answer:1, explanation:"正解は『重合度』。モノマーが何個つながっているかを示す考え方です。" },
+      { year:2020, sourceQuestion:"問3-B", field:"綿", question:"綿は、綿植物のどの部分から採取した繊維か。", choices:["種子","葉脈","靭皮"], answer:0, explanation:"正解は『種子』。綿は種子毛です。麻＝靭皮繊維と対比して覚えます。" },
+      { year:2020, sourceQuestion:"問3-C", field:"綿", question:"綿の主成分として最も適切なものはどれか。", choices:["リグニン","ヘミセルロース","セルロース"], answer:2, explanation:"正解は『セルロース』。綿はセルロース系天然繊維です。" },
+      { year:2020, sourceQuestion:"問3-D", field:"再生繊維", question:"再生繊維であるレーヨンの成分は、どの天然繊維と同じ成分か。", choices:["羊毛","綿","絹"], answer:1, explanation:"正解は『綿』。レーヨンはセルロースを原料とする再生繊維です。" },
+      { year:2020, sourceQuestion:"問3-E", field:"合成繊維", question:"ポリエチレンテレフタレート繊維、つまりPETは、どの結合をもつ鎖状高分子からなる繊維か。", choices:["エステル結合","アミド結合","水素結合"], answer:0, image:"2020/images/polymer_bonds.png", imageCaption:"PETはエステル結合、ナイロンはアミド結合で整理すると混同しにくくなります。", explanation:"正解は『エステル結合』。ポリエステルという名称どおり、主鎖にエステル結合をもつ合成繊維です。" },
+      { year:2020, sourceQuestion:"問3-F", field:"バイオマス繊維", question:"ポリ乳酸の原料には、バイオマスの主に何のでんぷんが利用されているか。", choices:["サツマイモ","トウモロコシ","米"], answer:1, explanation:"正解は『トウモロコシ』。ポリ乳酸はバイオマス由来繊維として出題されやすいです。" },
+      { year:2020, sourceQuestion:"問3-G", field:"紡糸法", question:"レーヨンは、主にどの紡糸方法により製造されているか。", choices:["乾式紡糸","湿式紡糸","溶融紡糸"], answer:1, image:"2020/images/spinning_methods.jpg", imageCaption:"湿式紡糸は溶液を凝固浴中で繊維化する方法です。レーヨンで重要です。", explanation:"正解は『湿式紡糸』。レーヨンは溶液を凝固浴中で繊維化する湿式紡糸で製造されます。" },
+      { year:2020, sourceQuestion:"問3-H", field:"紡糸法", question:"ナイロンは、主にどの紡糸方法により製造されているか。", choices:["乾式紡糸","湿式紡糸","溶融紡糸"], answer:2, image:"2020/images/spinning_methods.jpg", imageCaption:"溶融紡糸は熱で溶かしてノズルから押し出し、冷却して繊維化する方法です。", explanation:"正解は『溶融紡糸』。ナイロンやポリエステルで重要な紡糸法です。" },
+
+      { year:2020, sourceQuestion:"問4-A", field:"糸の種類", question:"糸中に玉・節をあらわし、色糸を使用する飾り糸として最も適切なものはどれか。", choices:["モール糸","ノップヤーン","ループヤーン"], answer:1, explanation:"正解は『ノップヤーン』。糸の中に玉状・節状の部分を作った装飾糸です。" },
+      { year:2020, sourceQuestion:"問4-B", field:"紡毛紡績", question:"硫酸を用いて原料に含まれる植物性不純物を除去する工程はどれか。", choices:["化炭処理","カーディング","コーミング"], answer:0, explanation:"正解は『化炭処理』。植物質を酸で炭化させて除去する工程です。" },
+      { year:2020, sourceQuestion:"問4-C", field:"番手", question:"1kgの紡毛糸の長さが700,000cmである場合、メートル番手として最も適切なのはどれか。", choices:["7番手","70番手","700番手"], answer:1, explanation:"正解は『70番手』。700,000cmは7,000m、1kgは1,000gなので、7,000÷1,000=70です。" },
+      { year:2020, sourceQuestion:"問4-D", field:"繊度", question:"1dtexの糸の100m分の質量として最も適切なものはどれか。", choices:["1g","0.1g","0.01g"], answer:2, explanation:"正解は『0.01g』。1dtexは10,000mあたり1gなので、100mでは0.01gです。※ここは元資料の解答欄と要確認です。" },
+      { year:2020, sourceQuestion:"問4-E", field:"糸のかさ高性", question:"パッキングファクタは、何を繊維の密度で除して算出されるか。", choices:["糸の見掛けの密度","含気率（空隙率）","糸のメートル番手"], answer:0, explanation:"正解は『糸の見掛けの密度』。糸の中に繊維がどの程度詰まっているかを見る指標です。" },
+      { year:2020, sourceQuestion:"問4-F", field:"加工糸", question:"エアジェット加工によりフィラメント相互の配置を入れ替え、交絡部を形成した糸を何というか。", choices:["クレープ糸","インターレース糸","シェニール糸"], answer:1, explanation:"正解は『インターレース糸』。高速空気流でフィラメントを交絡させた糸です。" },
+      { year:2020, sourceQuestion:"問4-G", field:"特殊糸", question:"プラスチックフィルムを延伸した後、一定の幅で切断して得られる糸を何というか。", choices:["スリットヤーン","ラッピングヤーン","スプリットヤーン"], answer:0, explanation:"正解は『スリットヤーン』。フィルムを細く切り裂いて糸状にしたものです。" },
+      { year:2020, sourceQuestion:"問4-H", field:"糸表示", question:"20番手の綿糸で双糸を作った場合、JIS上の表示として最も適切なものはどれか。", choices:["2／20","20／2s","2s／20"], answer:0, explanation:"正解は『2／20』。綿番手の双糸表示として整理します。" },
+      { year:2020, sourceQuestion:"問4-I", field:"糸表示", question:"メートル番手で20番手の単糸の場合、表示として最も適切なものはどれか。", choices:["1／20","20／1","1s／20"], answer:1, explanation:"正解は『20／1』。メートル番手の単糸表示です。" },
+      { year:2020, sourceQuestion:"問4-J", field:"糸表示", question:"20テックスの単糸を2本引きそろえた場合、表示として最も適切なものはどれか。", choices:["20tex×2","20×2／tex","20tex／2"], answer:0, explanation:"正解は『20tex×2』。tex表示では単糸の太さと本数を掛け合わせる形で表示します。" },
+
+      { year:2020, sourceQuestion:"問5-A", field:"織物組織", question:"平織の毛織物として最も適切なものはどれか。", choices:["ギャバジン","ポーラ","キャラコ"], answer:1, explanation:"正解は『ポーラ』。ポーラは平織の毛織物です。" },
+      { year:2020, sourceQuestion:"問5-B", field:"織物組織", question:"たて方向、あるいは、よこ方向にうねが現れる織物組織は、どの組織の変化組織か。", choices:["平織","綾織（斜文織）","朱子織"], answer:1, explanation:"正解は『綾織（斜文織）』。うねや斜めの筋が出る組織として整理します。" },
+      { year:2020, sourceQuestion:"問5-C", field:"織物組織", question:"蜂巣織などのように、基本組織・変化組織・混合組織に分類できない組織を何というか。", choices:["複雑組織","特別組織","均衡組織"], answer:1, explanation:"正解は『特別組織』。蜂巣織は特別組織の代表例です。" },
+      { year:2020, sourceQuestion:"問5-D", field:"綿織物", question:"平織の綿織物として最も適切なものはどれか。", choices:["金巾","デニム","ドスキン"], answer:0, explanation:"正解は『金巾』。金巾は平織の綿織物です。" },
+      { year:2020, sourceQuestion:"問5-E", field:"織物組織", question:"糸の屈曲が少なく、密に並べられ、糸相互の拘束が少ない基本組織はどれか。", choices:["朱子織","模紗織","マット織"], answer:0, explanation:"正解は『朱子織』。糸の浮きが多く、光沢やなめらかさが出やすい組織です。" },
+      { year:2020, sourceQuestion:"問5-F", field:"織物組織", question:"組、紗などの組織は、別名で何と呼ばれるか。", choices:["からみ組織","二重組織","変化組織"], answer:0, explanation:"正解は『からみ組織』。たて糸同士をからませる組織です。" },
+      { year:2020, sourceQuestion:"問5-G", field:"毛織物", question:"斜文織の毛織物として最も適切なものはどれか。", choices:["トロピカル","ドスキン","サージ"], answer:2, explanation:"正解は『サージ』。サージは斜文織の毛織物です。" },
+      { year:2020, sourceQuestion:"問5-H", field:"絹織物", question:"朱子織を利用した絹織物として最も適切なものはどれか。", choices:["タフタ","綸子","綾羽二重"], answer:1, explanation:"正解は『綸子』。綸子は朱子組織を利用した絹織物です。" },
+      { year:2020, sourceQuestion:"問5-I", field:"パイル織物", question:"別珍では、パイルを密集させるためにどのパイルのみで構成されるか。", choices:["ファストパイル","ループパイル","ルーズパイル"], answer:0, explanation:"正解は『ファストパイル』。別珍の構造として押さえます。" },
+      { year:2020, sourceQuestion:"問5-J", field:"織物組織図", question:"設問中の組織図に該当するものとして、解答例で正しいとされているものはどれか。", choices:["a","b","c"], answer:0, image:"2020/images/question5_j.png", imageCaption:"元問題の組織図です。図の見方に慣れることで、織物組織の判定力が上がります。", explanation:"正解は『a』。図を見て組織を判定するタイプの問題です。" },
+
+      { year:2020, sourceQuestion:"問6-A", field:"編物", question:"よこ編において、編目が横方向に連なった列を何というか。", choices:["ウェール","コース","ループ"], answer:1, image:"2020/images/course_wale.png", imageCaption:"横方向がコース、縦方向がウェールです。", explanation:"正解は『コース』。横方向＝コース、縦方向＝ウェールはTES頻出です。" },
+      { year:2020, sourceQuestion:"問6-B", field:"編物", question:"編目が縦方向に連なった列を何というか。", choices:["ループ","ウェール","コース"], answer:1, image:"2020/images/course_wale.png", imageCaption:"縦方向がウェールです。コースとセットで覚えます。", explanation:"正解は『ウェール』。編物の方向名称は図問題とセットで問われやすいです。" },
+      { year:2020, sourceQuestion:"問6-C", field:"編組織", question:"シングルニットの基本組織で、耳まくれやランが発生しやすい組織はどれか。", choices:["平編","ゴム編","パール編"], answer:0, image:"2020/images/plain_knit.png", imageCaption:"平編は基本組織ですが、耳まくれ・ランが発生しやすい点が狙われます。", explanation:"正解は『平編』。最も基本的な編組織ですが、端部が丸まりやすい特徴があります。" },
+      { year:2020, sourceQuestion:"問6-D", field:"編組織", question:"伸縮性に優れ、袖口や裾などにも多用される編組織はどれか。", choices:["天竺編","ガーター編","ゴム編"], answer:2, image:"2020/images/rib_knit.png", imageCaption:"ゴム編はリブ編とも呼ばれ、伸縮性が大きいことが特徴です。", explanation:"正解は『ゴム編』。伸縮性に優れるため、袖口や裾などに多く使われます。" },
+      { year:2020, sourceQuestion:"問6-E", field:"編組織", question:"表裏ともに同じ編目が現れ、横方向への伸縮性が大きい編組織はどれか。", choices:["平編","両面編","ゴム編"], answer:1, image:"2020/images/interlock_knit.png", imageCaption:"両面編は厚みと安定性があり、シングルニットとの比較で理解すると定着します。", explanation:"正解は『両面編』。ダブルニット系組織として、厚みや安定性が高い特徴があります。" },
+      { year:2020, sourceQuestion:"問6-F", field:"編物", question:"編物で、編糸が切れて編目がほどけていく現象を何というか。", choices:["ピリング","ラン","スナッギング"], answer:1, explanation:"正解は『ラン』。ストッキングなどで伝線状にほどける現象です。" },
+      { year:2020, sourceQuestion:"問6-G", field:"たて編", question:"たて編の代表的な組織として最も適切なものはどれか。", choices:["トリコット","ゴム編","鹿の子編"], answer:0, explanation:"正解は『トリコット』。たて編はランしにくく、生地の安定性が高い特徴があります。" },
+      { year:2020, sourceQuestion:"問6-H", field:"編物特性", question:"平編の特徴として最も適切なものはどれか。", choices:["耳まくれしにくい","ランしやすい","伸縮性がほとんどない"], answer:1, image:"2020/images/plain_knit.png", imageCaption:"平編は基本組織ですが、ランしやすい・耳まくれしやすい弱点もセットで覚えます。", explanation:"正解は『ランしやすい』。平編は耳まくれやランが発生しやすい代表的組織です。" }
     ];
 
     let current = 0;
     let score = 0;
-    let selectedMode = "2020年 問1";
+    let selectedMode = "2020年 問1〜問6";
     let answered = false;
 
-    const screens = ["home", "yearSelect", "quiz", "result"];
+    const screens = ["home", "quiz", "result"];
 
     function showScreen(id) {
       screens.forEach(screen => document.getElementById(screen).classList.add("hidden"));
@@ -952,16 +284,10 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function goHome() {
-      showScreen("home");
-    }
-
-    function showYearSelect() {
-      showScreen("yearSelect");
-    }
+    function goHome() { showScreen("home"); }
 
     function startQuiz(mode) {
-      selectedMode = mode.includes('2020') ? mode : '2020年 問1';
+      selectedMode = mode || "2020年 問1〜問6";
       current = 0;
       score = 0;
       answered = false;
@@ -977,16 +303,20 @@
       document.getElementById("progress").style.width = `${((current + 1) / questions.length) * 100}%`;
       document.getElementById("yearPill").textContent = q.year;
       document.getElementById("fieldPill").textContent = q.field;
+      document.getElementById("sourcePill").textContent = q.sourceQuestion;
       document.getElementById("questionText").textContent = q.question;
-      const questionImage = document.getElementById("questionImage");
+
+      const imageBox = document.getElementById("questionImage");
       if (q.image) {
-        questionImage.classList.remove("hidden");
-        questionImage.innerHTML = `<img src="${q.image}" alt="${q.imageAlt || '問題補助図'}"><p class="image-caption">${q.imageCaption || '理解を助ける補助図です。'}</p>`;
+        imageBox.classList.remove("hidden");
+        imageBox.innerHTML = `<img src="${q.image}" alt="${q.imageAlt || q.sourceQuestion}"><p class="image-caption">${q.imageCaption || "理解を助ける補助図です。"}</p>`;
       } else {
-        questionImage.classList.add("hidden");
-        questionImage.innerHTML = "";
+        imageBox.classList.add("hidden");
+        imageBox.innerHTML = "";
       }
+
       document.getElementById("feedback").classList.add("hidden");
+      document.getElementById("feedback").innerHTML = "";
       document.getElementById("nextBtn").classList.add("hidden");
 
       const choices = document.getElementById("choices");
@@ -994,6 +324,7 @@
       q.choices.forEach((choice, index) => {
         const btn = document.createElement("button");
         btn.className = "choice";
+        btn.type = "button";
         btn.onclick = () => answerQuestion(index);
         btn.innerHTML = `<span class="choice-mark">${String.fromCharCode(65 + index)}</span><span>${choice}</span>`;
         choices.appendChild(btn);
@@ -1007,18 +338,14 @@
       const isCorrect = index === q.answer;
       if (isCorrect) score++;
 
-      const choiceButtons = document.querySelectorAll(".choice");
-      choiceButtons.forEach((btn, i) => {
+      document.querySelectorAll(".choice").forEach((btn, i) => {
         if (i === q.answer) btn.classList.add("correct");
         if (i === index && !isCorrect) btn.classList.add("wrong");
       });
 
       const feedback = document.getElementById("feedback");
       feedback.classList.remove("hidden");
-      feedback.innerHTML = `
-        <h3>${isCorrect ? "⭕ 正解です" : "❌ 惜しいです"}</h3>
-        <p>${q.explanation}</p>
-      `;
+      feedback.innerHTML = `<h3>${isCorrect ? "⭕ 正解です" : "❌ 惜しいです"}</h3><p>${q.explanation}</p>`;
       document.getElementById("nextBtn").classList.remove("hidden");
     }
 
@@ -1038,15 +365,11 @@
       document.getElementById("totalNum").textContent = total;
       document.getElementById("correctNum").textContent = score;
       document.getElementById("rateNum").textContent = `${rate}%`;
-      document.getElementById("resultNote").textContent = rate >= 80
-        ? "かなり良い仕上がりです。次は解説を読んで知識を固めましょう。"
-        : "間違えた問題を中心に復習すると、得点が安定します。";
+      document.getElementById("resultNote").textContent = rate >= 80 ? "かなり良い仕上がりです。次は解説を読んで知識を固めましょう。" : "間違えた問題を中心に復習すると、得点が安定します。";
       showScreen("result");
     }
 
-    function restartQuiz() {
-      startQuiz(selectedMode);
-    }
+    function restartQuiz() { startQuiz(selectedMode); }
   </script>
 </body>
 </html>
