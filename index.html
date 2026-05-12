@@ -352,6 +352,10 @@
             <strong>図解問題だけ</strong>
             <span>画像付き問題を集中して復習します。</span>
           </button>
+          <button class="mode" onclick="startQuiz('苦手問題')">
+            <strong>苦手問題復習</strong>
+            <span id="weakCountLabel">間違えた問題だけを復習します。</span>
+          </button>
         </div>
       </div>
     </section>
@@ -408,6 +412,7 @@
     let score = 0;
     let selectedMode = "2020年 全問題";
     let answered = false;
+    let weakQuestions = JSON.parse(localStorage.getItem("weakQuestions") || "[]");
 
     function showScreen(id){
       document.getElementById("home").classList.add("hidden");
@@ -434,6 +439,8 @@
 
       if(selectedMode.includes("ランダム")){
         currentQuestions = shuffleArray(allQuestions).slice(0, 10);
+      }else if(selectedMode.includes("苦手")){
+        currentQuestions = allQuestions.filter(q => weakQuestions.includes(q.sourceQuestion));
       }else if(selectedMode.includes("図解")){
         currentQuestions = allQuestions.filter(q => q.image);
       }else{
@@ -441,7 +448,11 @@
       }
 
       if(currentQuestions.length === 0){
-        alert("問題データが読み込めていません。questions/2020.js を確認してください。");
+        if(selectedMode.includes("苦手")){
+          alert("現在、苦手問題はありません。まずは全問題やランダム10問で学習してみてください。");
+        }else{
+          alert("問題データが読み込めていません。questions/2020.js を確認してください。");
+        }
         return;
       }
 
@@ -493,7 +504,20 @@
 
       const q = currentQuestions[current];
       const isCorrect = selectedIndex === q.answer;
-      if(isCorrect) score++;
+      if(isCorrect){
+        score++;
+        if(weakQuestions.includes(q.sourceQuestion)){
+          weakQuestions = weakQuestions.filter(id => id !== q.sourceQuestion);
+          localStorage.setItem("weakQuestions", JSON.stringify(weakQuestions));
+          updateWeakCountLabel();
+        }
+      }else{
+        if(!weakQuestions.includes(q.sourceQuestion)){
+          weakQuestions.push(q.sourceQuestion);
+          localStorage.setItem("weakQuestions", JSON.stringify(weakQuestions));
+          updateWeakCountLabel();
+        }
+      }
 
       const buttons = document.querySelectorAll(".choice");
       buttons.forEach((btn, index) => {
@@ -526,9 +550,21 @@
       showScreen("finish");
     }
 
+    function updateWeakCountLabel(){
+      const label = document.getElementById("weakCountLabel");
+      if(!label) return;
+      const count = weakQuestions.length;
+      label.textContent = count > 0
+        ? `現在 ${count}問の苦手問題があります。`
+        : "間違えた問題だけを復習します。";
+    }
+
     function goHome(){
+      updateWeakCountLabel();
       showScreen("home");
     }
+
+    updateWeakCountLabel();
   </script>
 </body>
 </html>
