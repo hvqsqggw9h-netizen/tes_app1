@@ -155,17 +155,17 @@
         <h2>2020年 科目1を学習</h2>
         <p class="subtitle">問1〜問6まで対応中。図解付き問題も追加しています。</p>
         <div class="grid">
-          <button class="mode" onclick="startQuiz('2020年 問1〜問6')">
-            <strong>問1〜問6を解く</strong>
-            <span>繊維分類・繊維物性・糸・織物・編物まで</span>
+          <button class="mode" onclick="startQuiz('2020年 問1〜問10')">
+            <strong>問1〜問10を解く</strong>
+            <span>2020年の前半範囲を順番に学習</span>
           </button>
           <button class="mode" onclick="startQuiz('2020年 図解あり')">
-            <strong>図解問題を含めて復習</strong>
-            <span>海島型・紡糸法・編物図を見ながら理解</span>
+            <strong>図解問題だけ復習</strong>
+            <span>画像付き問題を集中して確認</span>
           </button>
-          <button class="mode" onclick="startQuiz('2020年 ランダム')">
-            <strong>ランダム復習</strong>
-            <span>今後、苦手問題保存にも対応予定</span>
+          <button class="mode" onclick="startQuiz('2020年 ランダム10問')">
+            <strong>ランダム10問</strong>
+            <span>毎回ランダムに10問だけ出題</span>
           </button>
         </div>
       </section>
@@ -302,8 +302,9 @@
 
     let current = 0;
     let score = 0;
-    let selectedMode = "2020年 問1〜問6";
+    let selectedMode = "2020年 問1〜問10";
     let answered = false;
+    let currentQuestions = [];
 
     const screens = ["home", "quiz", "result"];
 
@@ -315,21 +316,39 @@
 
     function goHome() { showScreen("home"); }
 
+    function shuffleArray(array) {
+      const copied = [...array];
+      for (let i = copied.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copied[i], copied[j]] = [copied[j], copied[i]];
+      }
+      return copied;
+    }
+
     function startQuiz(mode) {
-      selectedMode = mode || "2020年 問1〜問6";
+      selectedMode = mode || "2020年 問1〜問10";
       current = 0;
       score = 0;
       answered = false;
+
+      if (selectedMode.includes("ランダム")) {
+        currentQuestions = shuffleArray(questions).slice(0, 10);
+      } else if (selectedMode.includes("図解")) {
+        currentQuestions = questions.filter(q => q.image);
+      } else {
+        currentQuestions = [...questions];
+      }
+
       showScreen("quiz");
       renderQuestion();
     }
 
     function renderQuestion() {
       answered = false;
-      const q = questions[current];
+      const q = currentQuestions[current];
       document.getElementById("modeLabel").textContent = selectedMode;
-      document.getElementById("countLabel").textContent = `${current + 1} / ${questions.length}`;
-      document.getElementById("progress").style.width = `${((current + 1) / questions.length) * 100}%`;
+      document.getElementById("countLabel").textContent = `${current + 1} / ${currentQuestions.length}`;
+      document.getElementById("progress").style.width = `${((current + 1) / currentQuestions.length) * 100}%`;
       document.getElementById("yearPill").textContent = q.year;
       document.getElementById("fieldPill").textContent = q.field;
       document.getElementById("sourcePill").textContent = q.sourceQuestion;
@@ -358,7 +377,7 @@
     function answerQuestion(index) {
       if (answered) return;
       answered = true;
-      const q = questions[current];
+      const q = currentQuestions[current];
       const isCorrect = index === q.answer;
       if (isCorrect) score++;
 
@@ -376,7 +395,7 @@
     }
 
     function nextQuestion() {
-      if (current < questions.length - 1) {
+      if (current < currentQuestions.length - 1) {
         current++;
         renderQuestion();
       } else {
@@ -385,7 +404,7 @@
     }
 
     function showResult() {
-      const total = questions.length;
+      const total = currentQuestions.length;
       const rate = Math.round((score / total) * 100);
       document.getElementById("scoreText").textContent = `${score} / ${total}`;
       document.getElementById("totalNum").textContent = total;
