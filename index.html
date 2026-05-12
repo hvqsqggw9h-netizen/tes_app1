@@ -356,6 +356,23 @@
             <strong>苦手問題復習</strong>
             <span id="weakCountLabel">間違えた問題だけを復習します。</span>
           </button>
+          <button class="mode" onclick="showAnalysis()">
+            <strong>分野別分析</strong>
+            <span>どの分野が苦手かを確認します。</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="analysis" class="hidden">
+      <div class="finish-card">
+        <div class="section-label">ANALYSIS</div>
+        <h2>分野別 正答率分析</h2>
+        <p class="lead" style="margin-top:8px;">これまでの回答履歴から、分野ごとの正答率を表示します。</p>
+        <div id="analysisList"></div>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="goHome()">ホームへ戻る</button>
+          <button class="btn btn-secondary" onclick="resetStats()">分析データをリセット</button>
         </div>
       </div>
     </section>
@@ -413,9 +430,11 @@
     let selectedMode = "2020年 全問題";
     let answered = false;
     let weakQuestions = JSON.parse(localStorage.getItem("weakQuestions") || "[]");
+    let fieldStats = JSON.parse(localStorage.getItem("fieldStats") || "{}");
 
     function showScreen(id){
       document.getElementById("home").classList.add("hidden");
+      document.getElementById("analysis").classList.add("hidden");
       document.getElementById("quiz").classList.add("hidden");
       document.getElementById("finish").classList.add("hidden");
       document.getElementById(id).classList.remove("hidden");
@@ -504,6 +523,8 @@
 
       const q = currentQuestions[current];
       const isCorrect = selectedIndex === q.answer;
+      recordFieldStats(q.field, isCorrect);
+
       if(isCorrect){
         score++;
         if(weakQuestions.includes(q.sourceQuestion)){
@@ -548,6 +569,48 @@
     function finishQuiz(){
       document.getElementById("scoreText").textContent = `${currentQuestions.length}問中 ${score}問 正解です。`;
       showScreen("finish");
+    }
+
+    function recordFieldStats(field, isCorrect){
+      if(!fieldStats[field]){
+        fieldStats[field] = { total:0, correct:0 };
+      }
+      fieldStats[field].total += 1;
+      if(isCorrect) fieldStats[field].correct += 1;
+      localStorage.setItem("fieldStats", JSON.stringify(fieldStats));
+    }
+
+    function showAnalysis(){
+      const list = document.getElementById("analysisList");
+      const entries = Object.entries(fieldStats)
+        .map(([field, stat]) => {
+          const rate = stat.total ? Math.round((stat.correct / stat.total) * 100) : 0;
+          return { field, total: stat.total, correct: stat.correct, rate };
+        })
+        .sort((a, b) => a.rate - b.rate);
+
+      if(entries.length === 0){
+        list.innerHTML = `<div class="feedback"><h3>まだ分析データがありません</h3><p>まずは全問題やランダム10問を解くと、分野別の正答率がここに表示されます。</p></div>`;
+      }else{
+        list.innerHTML = entries.map(item => `
+          <div class="feedback" style="margin-bottom:14px;">
+            <h3>${item.field}</h3>
+            <p><strong>${item.rate}%</strong>　${item.correct} / ${item.total} 問正解</p>
+            <div class="progress-track" style="margin:12px 0 0;">
+              <div class="progress-bar" style="width:${item.rate}%;"></div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      showScreen("analysis");
+    }
+
+    function resetStats(){
+      if(!confirm("分野別分析データをリセットしますか？")) return;
+      fieldStats = {};
+      localStorage.setItem("fieldStats", JSON.stringify(fieldStats));
+      showAnalysis();
     }
 
     function updateWeakCountLabel(){
