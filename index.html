@@ -549,7 +549,8 @@ feedback.innerHTML = `
   ${imageHtml}
 `;
 
-
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
     function nextQuestion(){
       if(current < currentQuestions.length - 1){
         current++;
