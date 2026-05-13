@@ -549,12 +549,6 @@ feedback.innerHTML = `
   ${imageHtml}
 `;
 
-        : "";
-
-      feedback.classList.remove("hidden");
-      feedback.innerHTML = `<h3>${isCorrect ? "⭕ 正解です" : "❌ 惜しいです"}</h3><p>${q.explanation}</p>${imageHtml}`;
-      document.getElementById("nextBtn").classList.remove("hidden");
-    }
 
     function nextQuestion(){
       if(current < currentQuestions.length - 1){
