@@ -204,6 +204,40 @@
       line-height:1.7;
     }
 
+.question-jump{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:8px 2px 18px;
+  margin-bottom:10px;
+  scrollbar-width:thin;
+}
+
+.jump-btn{
+  flex:0 0 auto;
+  border:1px solid var(--border);
+  background:#fff;
+  color:#374151;
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+.jump-btn:hover{
+  border-color:var(--primary);
+  color:var(--primary);
+  background:#eff6ff;
+}
+
+.jump-btn.active{
+  background:var(--primary);
+  border-color:var(--primary);
+  color:#fff;
+}
+
     .choices{
       display:grid;
       gap:14px;
@@ -373,6 +407,8 @@
           <span id="sourcePill" class="chip">問</span>
         </div>
 
+<div id="questionJump" class="question-jump"></div>
+
         <p id="questionText" class="question-text"></p>
 
         <div id="questionImage" class="question-image hidden"></div>
@@ -446,8 +482,25 @@
       }
 
       showScreen("quiz");
+renderQuestionJump();
       renderQuestion();
     }
+
+function renderQuestionJump(){
+  const jump = document.getElementById("questionJump");
+  if(!jump) return;
+
+  jump.innerHTML = currentQuestions.map((q, index) => `
+    <button class="jump-btn ${index === current ? "active" : ""}" onclick="jumpToQuestion(${index})">
+      ${q.sourceQuestion}
+    </button>
+  `).join("");
+}
+
+function jumpToQuestion(index){
+  current = index;
+  renderQuestion();
+}
 
     function renderQuestion(){
       answered = false;
@@ -460,6 +513,7 @@
       document.getElementById("fieldPill").textContent = q.field;
       document.getElementById("sourcePill").textContent = q.sourceQuestion;
       document.getElementById("questionText").textContent = q.question;
+renderQuestionJump();
 
       const imageBox = document.getElementById("questionImage");
       if(q.image && q.showImageBeforeAnswer){
