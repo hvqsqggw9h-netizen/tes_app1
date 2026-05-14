@@ -171,7 +171,8 @@ window.questions2021 = [
       practical:"タイヤコード、ベルト、ロープなどの産業資材では、高強度・低伸度が重要性能になります。",
       memory:"産業用高強度 = 重合度高く、延伸しっかり。"
     }
-  }
+  },
+  
   {
   year:2021,
   sourceQuestion:"問2-A",
@@ -264,4 +265,5 @@ window.questions2021 = [
     memory:"PETが一番熱に強い"
   }
 },
+  
 ];
