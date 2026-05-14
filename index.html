@@ -468,31 +468,42 @@
       return copied;
     }
 
-    function startQuiz(mode){
-      const q = currentQuestions[current];
-      selectedMode = mode || "2020年 全問題";
-      current = 0;
-      score = 0;
-      answered = false;
+function startQuiz(mode){
+  selectedMode = mode || "2020年 全問題";
+  current = 0;
+  score = 0;
+  answered = false;
 
-      if(selectedMode.includes("ランダム")){
-        currentQuestions = shuffleArray(allQuestions).slice(0, 10);
-      }else if(selectedMode.includes("図解")){
-        currentQuestions = allQuestions.filter(q => q.image);
-      }else{
-        currentQuestions = [...allQuestions];
-      }
+  let allQuestions = [];
 
-      if(currentQuestions.length === 0){
-        alert("問題データが読み込めていません。questions/2020.js を確認してください。");
-        return;
-      }
+  // --- 年度切替 ---
+  if(selectedMode.includes("2020")){
+    allQuestions = [...window.questions2020];
+  }
+  else if(selectedMode.includes("2021")){
+    allQuestions = [...window.questions2021];
+  }
 
-      showScreen("quiz");
-renderQuestionJump();
-      renderQuestion();
-    }
+  // --- 出題モード切替 ---
+  if(selectedMode.includes("ランダム")){
+    currentQuestions = shuffleArray(allQuestions).slice(0, 10);
+  }
+  else if(selectedMode.includes("図解")){
+    currentQuestions = allQuestions.filter(q => q.image);
+  }
+  else{
+    currentQuestions = [...allQuestions];
+  }
 
+  if(currentQuestions.length === 0){
+    alert("問題データが読み込めていません。");
+    return;
+  }
+
+  showScreen("quiz");
+  renderQuestionJump();
+  renderQuestion();
+}
 function renderQuestionJump(){
   const jump = document.getElementById("questionJump");
   if(!jump) return;
