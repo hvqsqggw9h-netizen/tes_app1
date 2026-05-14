@@ -1092,3 +1092,57 @@ window.questions2020 = window.questions2020.map(q => {
   }
   return q;
 });
+// --- 2020年度 正答修正パッチ ---
+// 問4-D・問11-C・問11-I の正答と解説を修正します。
+// questions/2020.js の一番下に貼り付けてください。
+
+const correctionMap2020 = {
+  "問4-D": {
+    answer: 2,
+    explanation: "正解は『0.01g』。1dtexは10,000mあたり1gなので、100mでは 1g × 100/10,000 = 0.01g です。",
+    detail: {
+      answer: "0.01g",
+      reason: "1dtexは、10,000mあたり1gの繊度です。100mは10,000mの1/100なので、質量は 1g × 1/100 = 0.01g になります。",
+      compare: "dtexは10,000m基準、texは1,000m基準、denierは9,000m基準です。基準長さの違いで混乱しやすい単位です。",
+      practical: "繊度単位は、極細繊維やフィラメント糸の太さ管理で頻出です。単位換算では、基準長さを先に確認するとミスを防げます。",
+      memory: "1dtex = 10,000mで1g。100mなら0.01g。"
+    }
+  },
+
+  "問11-C": {
+    answer: 2,
+    explanation: "正解は『スクリーン捺染』。孔版による捺染はスクリーン捺染です。",
+    detail: {
+      answer: "スクリーン捺染",
+      reason: "スクリーン捺染は、孔版を用いて生地表面に模様を印捺する代表的な捺染方法です。問題文の『孔版』が判断ポイントです。",
+      compare: "インクジェット捺染はデジタル方式、ローラ捺染は彫刻ローラなどを用いる方式、スクリーン捺染は孔版を用いる方式です。",
+      practical: "スクリーン捺染は、柄ごとに版を使って印捺するため、捺染方法の分類問題で頻出です。",
+      memory: "孔版 = スクリーン捺染。"
+    }
+  },
+
+  "問11-I": {
+    answer: 1,
+    explanation: "正解は『フィックス剤』。セルロース繊維の染色物の堅ろう性を増進させる後処理剤として押さえます。",
+    detail: {
+      answer: "フィックス剤",
+      reason: "フィックス剤は、染色物の堅ろう性を向上させるために用いられる後処理剤です。染料を繊維上により安定に保持し、色落ちや移染を抑える目的で使われます。",
+      compare: "均染剤は染色むらを抑える薬剤、フィックス剤は染色後の堅ろう性を高める薬剤、キレート剤は金属イオンを捕捉する薬剤です。役割が異なります。",
+      practical: "洗濯堅ろう度や湿潤堅ろう度を高めたい場合に、染色後処理としてフィックス剤が使われます。",
+      memory: "堅ろう性アップ = フィックス剤。"
+    }
+  }
+};
+
+window.questions2020 = window.questions2020.map(q => {
+  const correction = correctionMap2020[q.sourceQuestion];
+  if(correction){
+    return {
+      ...q,
+      answer: correction.answer,
+      explanation: correction.explanation,
+      detail: correction.detail
+    };
+  }
+  return q;
+});
