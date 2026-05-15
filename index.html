@@ -391,12 +391,12 @@
   <span>2021年度の問題を順番に確認します。</span>
 </button>
 
-/*
+
 <button class="mode" onclick="startQuiz('苦手問題')">
   <strong>苦手問題だけ</strong>
   <span>間違えた問題だけを復習します。</span>
 </button>
-*/
+
         </div>
       </div>
     </section>
@@ -524,15 +524,14 @@ function startQuiz(mode){
   score = 0;
   answered = false;
 
-  let allQuestions = [];
-
-
 /*
 function startQuiz(mode){
   selectedMode = mode || "2020年 全問題";
   current = 0;
   score = 0;
   answered = false;
+
+  let allQuestions = [];
 
   // --- 苦手問題モード ---
   if(selectedMode === "苦手問題"){
@@ -643,8 +642,14 @@ renderQuestionJump();
       answered = true;
 
       const q = currentQuestions[current];
-      const isCorrect = selectedIndex === q.answer;
-      if(isCorrect) score++;
+const isCorrect = selectedIndex === q.answer;
+
+if(isCorrect){
+  score++;
+  removeWrongId(q);
+}else{
+  saveWrongId(q);
+}
 
 
 /*
