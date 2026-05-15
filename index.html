@@ -390,6 +390,13 @@
   <strong>2021年 全問題</strong>
   <span>2021年度の問題を順番に確認します。</span>
 </button>
+
+/*
+<button class="mode" onclick="startQuiz('苦手問題')">
+  <strong>苦手問題だけ</strong>
+  <span>間違えた問題だけを復習します。</span>
+</button>
+*/
         </div>
       </div>
     </section>
@@ -452,6 +459,49 @@
     let selectedMode = "2020年 全問題";
     let answered = false;
 
+
+const WRONG_KEY = "tesWrongQuestions";
+
+function getQuestionId(q){
+  return `${q.year}-${q.sourceQuestion}`;
+}
+
+function loadWrongIds(){
+  try{
+    return JSON.parse(localStorage.getItem(WRONG_KEY)) || [];
+  }catch(e){
+    return [];
+  }
+}
+
+function saveWrongId(q){
+  const id = getQuestionId(q);
+  const ids = loadWrongIds();
+  if(!ids.includes(id)){
+    ids.push(id);
+    localStorage.setItem(WRONG_KEY, JSON.stringify(ids));
+  }
+}
+
+function removeWrongId(q){
+  const id = getQuestionId(q);
+  const ids = loadWrongIds().filter(savedId => savedId !== id);
+  localStorage.setItem(WRONG_KEY, JSON.stringify(ids));
+}
+
+function getAllQuestions(){
+  return [
+    ...(window.questions2020 || []),
+    ...(window.questions2021 || [])
+  ];
+}
+
+function getWrongQuestions(){
+  const ids = loadWrongIds();
+  return getAllQuestions().filter(q => ids.includes(getQuestionId(q)));
+}
+
+
     function showScreen(id){
       document.getElementById("home").classList.add("hidden");
       document.getElementById("quiz").classList.add("hidden");
@@ -475,6 +525,35 @@ function startQuiz(mode){
   answered = false;
 
   let allQuestions = [];
+
+
+/*
+function startQuiz(mode){
+  selectedMode = mode || "2020年 全問題";
+  current = 0;
+  score = 0;
+  answered = false;
+
+  // --- 苦手問題モード ---
+  if(selectedMode === "苦手問題"){
+    currentQuestions = getWrongQuestions();
+
+    if(currentQuestions.length === 0){
+      alert("現在、苦手問題はありません。間違えた問題がここに保存されます。");
+      return;
+    }
+
+    showScreen("quiz");
+    renderQuestionJump();
+    renderQuestion();
+    return;
+  }
+
+  let allQuestions = [];
+
+  // ここから下は既存の年度切替処理
+}
+*/
 
   // --- 年度切替 ---
   if(selectedMode.includes("2020")){
@@ -566,6 +645,16 @@ renderQuestionJump();
       const q = currentQuestions[current];
       const isCorrect = selectedIndex === q.answer;
       if(isCorrect) score++;
+
+
+/*
+if(isCorrect){
+  score++;
+  removeWrongId(q); // 正解できたら苦手から外す
+}else{
+  saveWrongId(q);   // 間違えたら苦手に保存
+}
+*/
 
       const buttons = document.querySelectorAll(".choice");
       buttons.forEach((btn, index) => {
