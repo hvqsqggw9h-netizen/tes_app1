@@ -391,6 +391,11 @@
   <span>2021年度の問題を順番に確認します。</span>
 </button>
 
+<button class="mode" onclick="startQuiz('2022年 全問題')">
+  <strong>2022年 全問題</strong>
+  <span>2022年度の問題を順番に確認します。</span>
+</button>
+
 
 <button class="mode" onclick="startQuiz('苦手問題')">
   <strong>苦手問題だけ</strong>
@@ -548,6 +553,11 @@ function startQuiz(mode){
   else if(selectedMode.includes("2021")){
     allQuestions = [...window.questions2021];
   }
+else if(selectedMode.includes("2022")){
+  allQuestions = [...window.questions2022];
+}
+
+
 
   // --- 出題モード切替 ---
   if(selectedMode.includes("ランダム")){
