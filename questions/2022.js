@@ -2083,4 +2083,3 @@ window.questions2022 = [
 
 })();
 
-];
