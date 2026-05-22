@@ -1777,6 +1777,171 @@ window.questions2021 = [
     memory:"色相・明度・彩度 = マンセル表色系。"
   }
 },
+// ===== 2021年度 修正版パッチ【完全版】 =====
+// questions/2021.js の一番最後、window.questions2021 = [...] の ]; より下に追加してください。
+// 目的：原本再確認後の正答に合わせて、answer / explanation / detail を上書きする。
+// 対象：問1-E / 問3-I / 問4-C / 問5-C / 問5-D / 問7-D〜H / 問9-F
+
+(function(){
+
+  function findChoiceIndex(q, keywords, fallbackIndex){
+    const list = Array.isArray(keywords) ? keywords : [keywords];
+    const index = q.choices.findIndex(choice =>
+      list.some(key => String(choice).includes(key))
+    );
+    return index >= 0 ? index : fallbackIndex;
+  }
+
+  const fixes2021 = {
+
+    "問1-E": {
+      getAnswer: q => 2, // 選択肢3
+      explanation: "正解は選択肢3。原本再確認により、問1-Eは選択肢3を正解として修正します。",
+      detail: {
+        answer: "選択肢3",
+        reason: "原本確認により、問1-Eは選択肢3が正解です。既存データの転記・OCR由来の不備を修正します。",
+        compare: "この設問は語群番号の取り違えが起こりやすいため、原本の解答番号を優先します。",
+        practical: "TES学習アプリでは、一般知識だけでなく試験原本の解答番号との整合が重要です。",
+        memory: "問1-E = 選択肢3。"
+      }
+    },
+
+    "問3-I": {
+      getAnswer: q => findChoiceIndex(q, "ポリ塩化ビニル", q.answer),
+      explanation: "正解は『ポリ塩化ビニル』。原本再確認により、問3-Iをポリ塩化ビニルに修正します。",
+      detail: {
+        answer: "ポリ塩化ビニル",
+        reason: "問3-Iは、原本確認によりポリ塩化ビニルが正解です。既存の解答・解説に誤りがある場合は、このパッチで上書きします。",
+        compare: "合成繊維・高分子名は、ナイロン、ポリエステル、アクリル、ポリ塩化ビニルなどが混同しやすいため、設問文と語群を優先して判断します。",
+        practical: "ポリ塩化ビニルは耐薬品性や難燃性などの特徴を持つ高分子として、繊維・樹脂材料の整理で重要です。",
+        memory: "問3-I = ポリ塩化ビニル。"
+      }
+    },
+
+    "問4-C": {
+      getAnswer: q => findChoiceIndex(q, "ラッピングヤーン", q.answer),
+      explanation: "正解は『ラッピングヤーン』。原本再確認により、問4-Cをラッピングヤーンに修正します。",
+      detail: {
+        answer: "ラッピングヤーン",
+        reason: "ラッピングヤーンは、芯となる糸などに別の糸を巻き付けて作る複合的な糸です。問4-Cは原本確認によりラッピングヤーンが正解です。",
+        compare: "コアヤーン、カバードヤーン、ラッピングヤーンなどは構造が似ているため、設問文の『巻き付ける』意味を確認して判断します。",
+        practical: "装飾糸、複合糸、伸縮糸などの理解に関係し、製品の外観や機能性に影響します。",
+        memory: "巻き付ける糸 = ラッピングヤーン。"
+      }
+    },
+
+    "問5-C": {
+      getAnswer: q => findChoiceIndex(q, ["5飛び10枚", "5飛び", "10枚"], q.answer),
+      explanation: "正解は『5飛び10枚』。原本再確認により、問5-Cを5飛び10枚に修正します。",
+      detail: {
+        answer: "5飛び10枚",
+        reason: "問5-Cは朱子織の組織条件に関する設問で、原本確認により5飛び10枚が正解です。",
+        compare: "朱子織では、飛び数と枚数の組み合わせが重要です。3飛び・5枚などの類似表現と混同しないようにします。",
+        practical: "朱子織の光沢、浮き、組織点の分散を理解するうえで、飛び数と枚数の関係は重要です。",
+        memory: "問5-C = 5飛び10枚。"
+      }
+    },
+
+    "問5-D": {
+      getAnswer: q => findChoiceIndex(q, "絽", q.answer),
+      explanation: "正解は『絽』。原本再確認により、問5-Dを絽に修正します。",
+      detail: {
+        answer: "絽",
+        reason: "絽は、からみ組織を用いた透け感のある織物で、夏物和装地などに使われます。問5-Dは原本確認により絽が正解です。",
+        compare: "紗・絽・模紗織は混同しやすい用語です。絽はからみ組織によってすき間を規則的に作る織物として整理します。",
+        practical: "和装地や清涼感のある素材を理解するうえで、紗・絽・からみ組織の違いは重要です。",
+        memory: "問5-D = 絽。"
+      }
+    },
+
+    "問7-D": {
+      getAnswer: q => findChoiceIndex(q, "ニードル", 13),
+      explanation: "正解は『ニードル』。原本再確認により、問7-Dをニードルに修正します。",
+      detail: {
+        answer: "ニードル",
+        reason: "ニードルは編針を指し、編成動作において糸を受け、ループ形成に関わる重要な部品です。問7-Dは原本確認によりニードルが正解です。",
+        compare: "シンカ、ニードル、タック、ミスなどは編成図で混同しやすいため、図中の位置と役割を対応させて覚えます。",
+        practical: "編機構造の理解では、ニードルとシンカの役割を分けて整理することが重要です。",
+        memory: "問7-D = ニードル。"
+      }
+    },
+
+    "問7-E": {
+      getAnswer: q => findChoiceIndex(q, "シンカ", 11),
+      explanation: "正解は『シンカ』。原本再確認により、問7-Eをシンカに修正します。",
+      detail: {
+        answer: "シンカ",
+        reason: "シンカは編成中にループ形成や編地保持を助ける部品です。問7-Eは原本確認によりシンカが正解です。",
+        compare: "ニードルは編針、シンカは編地・ループ形成を補助する部品として区別します。",
+        practical: "丸編機やよこ編機の構造理解では、ニードルとシンカの関係が基本になります。",
+        memory: "問7-E = シンカ。"
+      }
+    },
+
+    "問7-F": {
+      getAnswer: q => findChoiceIndex(q, "編成", 1),
+      explanation: "正解は『編成』。原本再確認により、問7-Fを編成に修正します。",
+      detail: {
+        answer: "編成",
+        reason: "編成は、糸をループ状にして編地を作る工程・動作を指します。問7-Fは原本確認により編成が正解です。",
+        compare: "編目はループそのもの、編成はそのループを作って編地にしていく動作として区別します。",
+        practical: "編物の構造や欠点、編機の動作を理解するうえで、編成という基本用語は重要です。",
+        memory: "問7-F = 編成。"
+      }
+    },
+
+    "問7-G": {
+      getAnswer: q => findChoiceIndex(q, "タック", 10),
+      explanation: "正解は『タック』。原本再確認により、問7-Gをタックに修正します。",
+      detail: {
+        answer: "タック",
+        reason: "タックは、旧ループを脱出させずに新しい糸を保持する編成動作で、変化組織の形成に使われます。問7-Gは原本確認によりタックが正解です。",
+        compare: "ミスは糸を受けずにループを休ませる動作、タックは新しい糸を保持する動作です。",
+        practical: "鹿の子編など、表面変化や厚みを出す編地の理解に関係します。",
+        memory: "問7-G = タック。"
+      }
+    },
+
+    "問7-H": {
+      getAnswer: q => findChoiceIndex(q, "ミス", 9),
+      explanation: "正解は『ミス』。原本再確認により、問7-Hをミスに修正します。",
+      detail: {
+        answer: "ミス",
+        reason: "ミスは、編針が糸を受け取らず、既存のループを保持したままにする編成動作です。問7-Hは原本確認によりミスが正解です。",
+        compare: "タックは新しい糸を保持しますが、ミスは糸を受けずにループを浮かせる動作として整理します。",
+        practical: "ミスは柄出し、伸縮性調整、編地表情の変化に関係します。",
+        memory: "問7-H = ミス。"
+      }
+    },
+
+    "問9-F": {
+      getAnswer: q => findChoiceIndex(q, "S撚り", 0),
+      explanation: "正解は『S撚り』。原本再確認により、問9-FをS撚りに修正します。",
+      detail: {
+        answer: "S撚り",
+        reason: "糸の撚り方向は、撚り筋の傾きがS字に沿うか、Z字に沿うかで判定します。問9-Fは原本確認によりS撚りが正解です。",
+        compare: "S撚りとZ撚りは図の傾きで判断します。右上がり・左上がりの見え方を図とセットで確認するのが安全です。",
+        practical: "撚り方向は、双糸、縫糸、織編物の外観や斜行に関係します。",
+        memory: "問9-F = S撚り。"
+      }
+    }
+
+  };
+
+  window.questions2021 = window.questions2021.map(q => {
+    const fix = fixes2021[q.sourceQuestion];
+    if(!fix) return q;
+
+    return {
+      ...q,
+      answer: fix.getAnswer(q),
+      explanation: fix.explanation,
+      detail: fix.detail
+    };
+  });
+
+})();
+
   
 ];
 
