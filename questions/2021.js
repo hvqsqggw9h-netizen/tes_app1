@@ -1776,7 +1776,7 @@ window.questions2021 = [
     practical:"色見本、製品色指定、色彩教育、品質管理で重要です。",
     memory:"色相・明度・彩度 = マンセル表色系。"
   }
-},
+
 // ===== 2021年度 修正版パッチ【完全版】 =====
 // questions/2021.js の一番最後、window.questions2021 = [...] の ]; より下に追加してください。
 // 目的：原本再確認後の正答に合わせて、answer / explanation / detail を上書きする。
@@ -1941,3 +1941,6 @@ window.questions2021 = [
   });
 
 })();
+
+
+  };
