@@ -1143,6 +1143,39 @@ window.questions2020 = window.questions2020.map(q => {
       explanation: correction.explanation,
       detail: correction.detail
     };
-  }
+  }// ===== 2020年度 修正版パッチ =====
+// 問4-J：正解を 3 に修正
+
+(function(){
+
+  const fixes2020 = {
+    "問4-J": {
+      answer: 2,
+      explanation: "正解は『20tex／2』。2020年問4-Jは、原本確認により選択肢3を正解として修正します。",
+      detail: {
+        answer: "20tex／2",
+        reason: "原本確認により、問4-Jは選択肢3が正解です。tex表示の設問として、ここでは選択肢3を正答として扱います。",
+        compare: "選択肢番号と表示形式が混同しやすいため、原本の解答を優先します。",
+        practical: "糸の太さ表示では、番手・tex・dtexで表記ルールが異なるため、設問ごとの語群確認が重要です。",
+        memory: "問4-J = 選択肢3。"
+      }
+    }
+  };
+
+  window.questions2020 = window.questions2020.map(q => {
+    const fix = fixes2020[q.sourceQuestion];
+    if(!fix) return q;
+
+    return {
+      ...q,
+      answer: fix.answer,
+      explanation: fix.explanation,
+      detail: fix.detail
+    };
+  });
+
+})();
   return q;
 });
+
+
